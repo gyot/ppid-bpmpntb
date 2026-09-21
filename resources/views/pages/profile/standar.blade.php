@@ -1,0 +1,82 @@
+@extends('layouts.app')
+
+@section('title', 'Standar Pelayanan - PPID BPMP NTB')
+@section('meta_description', 'Standar Pelayanan Informasi Publik PPID BPMP Provinsi Nusa Tenggara Barat')
+
+@section('content')
+<div class="page-header">
+    <div class="container-custom py-8">
+        <h1 class="text-3xl font-bold text-white mb-4">Standar Pelayanan</h1>
+        <nav class="breadcrumb">
+            <a href="{{ route('home') }}" class="text-secondary hover:text-white">Beranda</a>
+            <span class="mx-2 text-gray-400">/</span>
+            <a href="{{ route('profile.index') }}" class="text-secondary hover:text-white">Profil</a>
+            <span class="mx-2 text-gray-400">/</span>
+            <span class="text-white">Standar Pelayanan</span>
+        </nav>
+    </div>
+</div>
+
+<section class="py-12 bg-gray-50">
+    <div class="container-custom max-w-4xl">
+
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-10">
+            @if($content)
+                <div class="prose prose-lg max-w-none text-charcoal leading-relaxed">
+                    {!! $content !!}
+                </div>
+            @else
+                <div class="text-center mb-10">
+                    <div class="w-20 h-20 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-10 h-10 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold text-navy mb-2">Standar Pelayanan Informasi Publik</h2>
+                    <p class="text-gray-500">PPID BPMP Provinsi Nusa Tenggara Barat</p>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="p-5 bg-gray-50 rounded-xl">
+                        <h3 class="font-bold text-navy mb-2">1. Dasar Hukum</h3>
+                        <p class="text-charcoal text-sm leading-relaxed">[...] Undang-Undang Nomor 14 Tahun 2008 tentang Keterbukaan Informasi Publik dan peraturan pelaksanaannya.</p>
+                    </div>
+                    <div class="p-5 bg-gray-50 rounded-xl">
+                        <h3 class="font-bold text-navy mb-2">2. Persyaratan</h3>
+                        <p class="text-charcoal text-sm leading-relaxed">[...] Pemohon informasi publik adalah setiap orang yang meliputi warga negara Indonesia dan/atau badan hukum Indonesia.</p>
+                    </div>
+                    <div class="p-5 bg-gray-50 rounded-xl">
+                        <h3 class="font-bold text-navy mb-2">3. Prosedur Pelayanan</h3>
+                        <p class="text-charcoal text-sm leading-relaxed">[...] Pemohon mengajukan permohonan informasi secara tertulis atau melalui portal online. PPID melakukan verifikasi dan memberikan jawaban dalam jangka waktu yang ditentukan.</p>
+                    </div>
+                    <div class="p-5 bg-gray-50 rounded-xl">
+                        <h3 class="font-bold text-navy mb-2">4. Jangka Waktu Pelayanan</h3>
+                        <p class="text-charcoal text-sm leading-relaxed">[...] Pelayanan informasi publik diberikan paling lambat 10 hari kerja sejak permohonan diterima dan dapat diperpanjang paling lambat 7 hari kerja tambahan.</p>
+                    </div>
+                    <div class="p-5 bg-gray-50 rounded-xl">
+                        <h3 class="font-bold text-navy mb-2">5. Biaya/Tarif</h3>
+                        <p class="text-charcoal text-sm leading-relaxed">[...] Pelayanan informasi publik tidak dipungut biaya. Biaya hanya dikenakan untuk penggandaan dokumen sesuai ketentuan yang berlaku.</p>
+                    </div>
+                    <div class="p-5 bg-gray-50 rounded-xl">
+                        <h3 class="font-bold text-navy mb-2">6. Produk Pelayanan</h3>
+                        <p class="text-charcoal text-sm leading-relaxed">[...] Informasi publik yang diminta dalam bentuk dokumen cetak dan/atau dokumen elektronik.</p>
+                    </div>
+                    <div class="p-5 bg-gray-50 rounded-xl">
+                        <h3 class="font-bold text-navy mb-2">7. Sarana dan Prasarana</h3>
+                        <p class="text-charcoal text-sm leading-relaxed">[...] Ruang pelayanan informasi, website PPID, telepon, email, dan media sosial.</p>
+                    </div>
+                    <div class="p-5 bg-gray-50 rounded-xl">
+                        <h3 class="font-bold text-navy mb-2">8. Kompetensi Pelaksana</h3>
+                        <p class="text-charcoal text-sm leading-relaxed">[...] Pelaksana pelayanan informasi memiliki kompetensi di bidang pengelolaan informasi dan dokumentasi.</p>
+                    </div>
+                    <div class="p-5 bg-gray-50 rounded-xl">
+                        <h3 class="font-bold text-navy mb-2">9. Pengawasan Internal</h3>
+                        <p class="text-charcoal text-sm leading-relaxed">[...] Pengawasan dilakukan oleh Atasan PPID secara berkala terhadap pelaksanaan standar pelayanan informasi publik.</p>
+                    </div>
+                </div>
+            @endif
+        </div>
+
+    </div>
+</section>
+@endsection
