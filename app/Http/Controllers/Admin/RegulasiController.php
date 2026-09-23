@@ -230,13 +230,13 @@ class RegulasiController extends Controller
 
                     $created++;
                 } catch (\Exception $e) {
-                    $errors[] = 'Baris ' . ($i + 1) . ': ' . $e->getMessage();
+                    $errors[] = 'Baris ' . ($i + 1) . ' (' . $title . '): ' . $e->getMessage();
                 }
             }
 
             $message = "{$created} regulasi berhasil diimport.";
             if (!empty($errors)) {
-                $message .= ' ' . count($errors) . ' baris gagal.';
+                $message .= ' ' . count($errors) . ' baris gagal: ' . implode(' | ', array_slice($errors, 0, 5));
             }
 
             return redirect()->route('admin.regulasi.index')->with('success', $message);
