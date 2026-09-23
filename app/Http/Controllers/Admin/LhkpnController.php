@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Lhkpn;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 class LhkpnController extends Controller
@@ -52,7 +53,8 @@ class LhkpnController extends Controller
         try {
             $file = $request->file('file');
             $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
-            $filePath = $file->storeAs('uploads/lhkpn', $fileName, 'public');
+            $file->move(public_path('uploads/lhkpn'), $fileName);
+            $filePath = 'uploads/lhkpn/' . $fileName;
 
             Lhkpn::create([
                 'nama_pejabat' => $validated['nama_pejabat'],
@@ -104,13 +106,14 @@ class LhkpnController extends Controller
             }
 
             if ($request->hasFile('file')) {
-                if ($lhkpn->file_path && \Storage::disk('public')->exists($lhkpn->file_path)) {
-                    \Storage::disk('public')->delete($lhkpn->file_path);
+                if ($lhkpn->file_path && File::exists(public_path($lhkpn->file_path))) {
+                    File::delete(public_path($lhkpn->file_path));
                 }
 
                 $file = $request->file('file');
                 $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
-                $data['file_path'] = $file->storeAs('uploads/lhkpn', $fileName, 'public');
+                $file->move(public_path('uploads/lhkpn'), $fileName);
+                $data['file_path'] = 'uploads/lhkpn/' . $fileName;
                 $data['file_name'] = $file->getClientOriginalName();
             }
 
@@ -126,8 +129,8 @@ class LhkpnController extends Controller
     public function destroy(Lhkpn $lhkpn)
     {
         try {
-            if ($lhkpn->file_path && \Storage::disk('public')->exists($lhkpn->file_path)) {
-                \Storage::disk('public')->delete($lhkpn->file_path);
+            if ($lhkpn->file_path && File::exists(public_path($lhkpn->file_path))) {
+                File::delete(public_path($lhkpn->file_path));
             }
 
             $lhkpn->delete();

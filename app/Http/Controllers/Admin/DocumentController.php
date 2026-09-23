@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Document;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 class DocumentController extends Controller
@@ -57,7 +58,8 @@ class DocumentController extends Controller
         try {
             $file = $request->file('file');
             $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
-            $filePath = $file->storeAs('uploads/documents', $fileName, 'public');
+            $file->move(public_path('uploads/documents'), $fileName);
+            $filePath = 'uploads/documents/' . $fileName;
 
             Document::create([
                 'title' => $validated['title'],
@@ -117,13 +119,14 @@ class DocumentController extends Controller
             }
 
             if ($request->hasFile('file')) {
-                if ($dokuman->file_path && \Storage::disk('public')->exists($dokuman->file_path)) {
-                    \Storage::disk('public')->delete($dokuman->file_path);
+                if ($dokuman->file_path && File::exists(public_path($dokuman->file_path))) {
+                    File::delete(public_path($dokuman->file_path));
                 }
 
                 $file = $request->file('file');
                 $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
-                $data['file_path'] = $file->storeAs('uploads/documents', $fileName, 'public');
+                $file->move(public_path('uploads/documents'), $fileName);
+                $data['file_path'] = 'uploads/documents/' . $fileName;
                 $data['file_name'] = $file->getClientOriginalName();
                 $data['file_size'] = $file->getSize();
                 $data['mime_type'] = $file->getMimeType();
@@ -141,8 +144,8 @@ class DocumentController extends Controller
     public function destroy(Document $dokuman)
     {
         try {
-            if ($dokuman->file_path && \Storage::disk('public')->exists($dokuman->file_path)) {
-                \Storage::disk('public')->delete($dokuman->file_path);
+            if ($dokuman->file_path && File::exists(public_path($dokuman->file_path))) {
+                File::delete(public_path($dokuman->file_path));
             }
 
             $dokuman->delete();
@@ -195,7 +198,8 @@ class DocumentController extends Controller
                 $title = ucwords($title);
 
                 $fileName = time() . '_' . Str::slug($originalName) . '.' . $file->getClientOriginalExtension();
-                $filePath = $file->storeAs('uploads/documents', $fileName, 'public');
+                $file->move(public_path('uploads/documents'), $fileName);
+                $filePath = 'uploads/documents/' . $fileName;
 
                 Document::create([
                     'title' => $title,

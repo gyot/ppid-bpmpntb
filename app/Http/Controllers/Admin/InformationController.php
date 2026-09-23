@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\InformationPublik;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 class InformationController extends Controller
@@ -71,7 +72,8 @@ class InformationController extends Controller
         try {
             $file = $request->file('file');
             $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
-            $filePath = $file->storeAs('uploads/informasi', $fileName, 'public');
+            $file->move(public_path('uploads/informasi'), $fileName);
+            $filePath = 'uploads/informasi/' . $fileName;
 
             InformationPublik::create([
                 'title' => $validated['title'],
@@ -142,13 +144,14 @@ class InformationController extends Controller
             }
 
             if ($request->hasFile('file')) {
-                if ($informasi->file_path && \Storage::disk('public')->exists($informasi->file_path)) {
-                    \Storage::disk('public')->delete($informasi->file_path);
+                if ($informasi->file_path && File::exists(public_path($informasi->file_path))) {
+                    File::delete(public_path($informasi->file_path));
                 }
 
                 $file = $request->file('file');
                 $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
-                $data['file_path'] = $file->storeAs('uploads/informasi', $fileName, 'public');
+                $file->move(public_path('uploads/informasi'), $fileName);
+                $data['file_path'] = 'uploads/informasi/' . $fileName;
                 $data['file_name'] = $file->getClientOriginalName();
                 $data['file_size'] = $file->getSize();
                 $data['mime_type'] = $file->getMimeType();
@@ -166,8 +169,8 @@ class InformationController extends Controller
     public function destroy(InformationPublik $informasi)
     {
         try {
-            if ($informasi->file_path && \Storage::disk('public')->exists($informasi->file_path)) {
-                \Storage::disk('public')->delete($informasi->file_path);
+            if ($informasi->file_path && File::exists(public_path($informasi->file_path))) {
+                File::delete(public_path($informasi->file_path));
             }
 
             $informasi->delete();
@@ -221,7 +224,8 @@ class InformationController extends Controller
                 $title = ucwords($title);
 
                 $fileName = time() . '_' . Str::slug($originalName) . '.' . $file->getClientOriginalExtension();
-                $filePath = $file->storeAs('uploads/informasi', $fileName, 'public');
+                $file->move(public_path('uploads/informasi'), $fileName);
+                $filePath = 'uploads/informasi/' . $fileName;
 
                 InformationPublik::create([
                     'title' => $title,

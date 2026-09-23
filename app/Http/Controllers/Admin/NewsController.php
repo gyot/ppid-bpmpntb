@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\News;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 class NewsController extends Controller
@@ -71,7 +72,8 @@ class NewsController extends Controller
             if ($request->hasFile('image')) {
                 $file = $request->file('image');
                 $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
-                $data['image'] = $file->storeAs('uploads/news', $fileName, 'public');
+                $file->move(public_path('uploads/news'), $fileName);
+                $data['image'] = 'uploads/news/' . $fileName;
             }
 
             News::create($data);
@@ -125,13 +127,14 @@ class NewsController extends Controller
             }
 
             if ($request->hasFile('image')) {
-                if ($beritum->image && \Storage::disk('public')->exists($beritum->image)) {
-                    \Storage::disk('public')->delete($beritum->image);
+                if ($beritum->image && File::exists(public_path($beritum->image))) {
+                    File::delete(public_path($beritum->image));
                 }
 
                 $file = $request->file('image');
                 $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
-                $data['image'] = $file->storeAs('uploads/news', $fileName, 'public');
+                $file->move(public_path('uploads/news'), $fileName);
+                $data['image'] = 'uploads/news/' . $fileName;
             }
 
             $beritum->update($data);
@@ -146,8 +149,8 @@ class NewsController extends Controller
     public function destroy(News $beritum)
     {
         try {
-            if ($beritum->image && \Storage::disk('public')->exists($beritum->image)) {
-                \Storage::disk('public')->delete($beritum->image);
+            if ($beritum->image && File::exists(public_path($beritum->image))) {
+                File::delete(public_path($beritum->image));
             }
 
             $beritum->delete();

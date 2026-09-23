@@ -53,7 +53,7 @@
                                 @endif
                             </div>
                             @if($item->file_path)
-                                <a href="{{ Storage::url($item->file_path) }}" target="_blank" class="text-primary text-sm font-medium hover:underline">Unduh</a>
+                                <a href="{{ '/' . $item->file_path }}" target="_blank" class="text-primary text-sm font-medium hover:underline">Unduh</a>
                             @endif
                         </li>
                     @endforeach

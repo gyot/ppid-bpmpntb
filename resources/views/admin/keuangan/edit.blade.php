@@ -56,7 +56,7 @@
             <div>
                 <label class="input-label block text-sm font-medium text-gray-700 mb-1">File</label>
                 @if($item->file_path)
-                    <p class="text-sm text-gray-500 mb-1">File saat ini: <a href="{{ Storage::url($item->file_path) }}" target="_blank" class="text-primary hover:underline">{{ $item->file_name }}</a> ({{ $item->formatted_file_size }})</p>
+                    <p class="text-sm text-gray-500 mb-1">File saat ini: <a href="{{ '/' . $item->file_path }}" target="_blank" class="text-primary hover:underline">{{ $item->file_name }}</a> ({{ $item->formatted_file_size }})</p>
                 @endif
                 <input type="file" name="file" class="input-field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary @error('file') border-red-500 @enderror">
                 @error('file')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror

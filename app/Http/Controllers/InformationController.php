@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\InformationPublik;
 use App\Models\DaftarInformasiPublik;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class InformationController extends Controller
 {
@@ -176,11 +177,11 @@ class InformationController extends Controller
             ->where('status', 'published')
             ->firstOrFail();
 
-        if (!$informasi->file_path || !\Storage::disk('public')->exists($informasi->file_path)) {
+        if (!$informasi->file_path || !File::exists(public_path($informasi->file_path))) {
             abort(404);
         }
 
-        return \Storage::disk('public')->download($informasi->file_path, $informasi->file_name ?? basename($informasi->file_path));
+        return response()->download(public_path($informasi->file_path), $informasi->file_name ?? basename($informasi->file_path));
     }
 
     public function viewFile($slug)
@@ -189,12 +190,12 @@ class InformationController extends Controller
             ->where('status', 'published')
             ->firstOrFail();
 
-        if (!$informasi->file_path || !\Storage::disk('public')->exists($informasi->file_path)) {
+        if (!$informasi->file_path || !File::exists(public_path($informasi->file_path))) {
             abort(404);
         }
 
-        $path = \Storage::disk('public')->path($informasi->file_path);
-        $mime = \Storage::disk('public')->mimeType($informasi->file_path);
+        $path = public_path($informasi->file_path);
+        $mime = mime_content_type(public_path($informasi->file_path));
 
         return response()->file($path, [
             'Content-Type' => $mime,

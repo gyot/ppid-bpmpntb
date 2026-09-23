@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Keuangan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 class KeuanganController extends Controller
@@ -53,7 +54,8 @@ class KeuanganController extends Controller
         try {
             $file = $request->file('file');
             $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
-            $filePath = $file->storeAs('uploads/keuangan', $fileName, 'public');
+            $file->move(public_path('uploads/keuangan'), $fileName);
+            $filePath = 'uploads/keuangan/' . $fileName;
 
             Keuangan::create([
                 'title' => $validated['title'],
@@ -107,13 +109,14 @@ class KeuanganController extends Controller
             }
 
             if ($request->hasFile('file')) {
-                if ($keuangan->file_path && \Storage::disk('public')->exists($keuangan->file_path)) {
-                    \Storage::disk('public')->delete($keuangan->file_path);
+                if ($keuangan->file_path && File::exists(public_path($keuangan->file_path))) {
+                    File::delete(public_path($keuangan->file_path));
                 }
 
                 $file = $request->file('file');
                 $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
-                $data['file_path'] = $file->storeAs('uploads/keuangan', $fileName, 'public');
+                $file->move(public_path('uploads/keuangan'), $fileName);
+                $data['file_path'] = 'uploads/keuangan/' . $fileName;
                 $data['file_name'] = $file->getClientOriginalName();
                 $data['file_size'] = $file->getSize();
             }
@@ -130,8 +133,8 @@ class KeuanganController extends Controller
     public function destroy(Keuangan $keuangan)
     {
         try {
-            if ($keuangan->file_path && \Storage::disk('public')->exists($keuangan->file_path)) {
-                \Storage::disk('public')->delete($keuangan->file_path);
+            if ($keuangan->file_path && File::exists(public_path($keuangan->file_path))) {
+                File::delete(public_path($keuangan->file_path));
             }
 
             $keuangan->delete();
@@ -163,8 +166,8 @@ class KeuanganController extends Controller
         try {
             $keuangan->increment('download_count');
 
-            if ($keuangan->file_path && \Storage::disk('public')->exists($keuangan->file_path)) {
-                return \Storage::disk('public')->download($keuangan->file_path, $keuangan->file_name);
+            if ($keuangan->file_path && File::exists(public_path($keuangan->file_path))) {
+                return response()->download(public_path($keuangan->file_path), $keuangan->file_name);
             }
 
             return back()->with('error', 'File tidak ditemukan.');

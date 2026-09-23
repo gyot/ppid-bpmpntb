@@ -67,8 +67,8 @@ class DocumentController extends Controller
 
         $document->increment('download_count');
 
-        return Storage::disk($document->disk ?? 'public')->download(
-            $document->file_path,
+        return response()->download(
+            public_path($document->file_path),
             $document->title . '.' . pathinfo($document->file_path, PATHINFO_EXTENSION)
         );
     }

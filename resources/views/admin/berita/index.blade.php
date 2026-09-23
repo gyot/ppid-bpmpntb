@@ -56,7 +56,7 @@
                         <tr class="border-b border-gray-100 hover:bg-gray-50">
                             <td class="py-3 px-4">
                                 @if($item->image)
-                                    <img src="{{ Storage::url($item->image) }}" alt="{{ $item->title }}" class="w-16 h-10 object-cover rounded">
+                                    <img src="{{ '/' . $item->image }}" alt="{{ $item->title }}" class="w-16 h-10 object-cover rounded">
                                 @else
                                     <div class="w-16 h-10 bg-gray-200 rounded flex items-center justify-center text-gray-400 text-xs">N/A</div>
                                 @endif

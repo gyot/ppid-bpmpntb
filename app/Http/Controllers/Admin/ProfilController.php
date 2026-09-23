@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class ProfilController extends Controller
 {
@@ -16,8 +17,8 @@ class ProfilController extends Controller
 
         $strukturUrl = null;
         $strukturPath = Setting::get('profil_struktur_gambar');
-        if ($strukturPath && \Storage::disk('public')->exists($strukturPath)) {
-            $strukturUrl = \Storage::disk('public')->url($strukturPath);
+        if ($strukturPath && File::exists(public_path($strukturPath))) {
+            $strukturUrl = '/' . $strukturPath;
         }
 
         $skFileName = Setting::get('profil_sk_nama');
@@ -48,13 +49,14 @@ class ProfilController extends Controller
             ]);
 
             $oldPath = Setting::get('profil_struktur_gambar');
-            if ($oldPath && \Storage::disk('public')->exists($oldPath)) {
-                \Storage::disk('public')->delete($oldPath);
+            if ($oldPath && File::exists(public_path($oldPath))) {
+                File::delete(public_path($oldPath));
             }
 
             $file = $request->file('profil_struktur_gambar');
             $fileName = 'struktur_org_' . time() . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('uploads/profil', $fileName, 'public');
+            $file->move(public_path('uploads/profil'), $fileName);
+            $path = 'uploads/profil/' . $fileName;
             Setting::set('profil_struktur_gambar', $path, 'profil_struktur');
         }
 
@@ -64,14 +66,15 @@ class ProfilController extends Controller
             ]);
 
             $oldPath = Setting::get('profil_sk_file');
-            if ($oldPath && \Storage::disk('public')->exists($oldPath)) {
-                \Storage::disk('public')->delete($oldPath);
+            if ($oldPath && File::exists(public_path($oldPath))) {
+                File::delete(public_path($oldPath));
             }
 
             $file = $request->file('profil_sk_file');
             $originalName = $file->getClientOriginalName();
             $fileName = 'sk_ppid_' . time() . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('uploads/profil', $fileName, 'public');
+            $file->move(public_path('uploads/profil'), $fileName);
+            $path = 'uploads/profil/' . $fileName;
             Setting::set('profil_sk_file', $path, 'profil_sk');
             Setting::set('profil_sk_nama', $originalName, 'profil_sk');
         }
@@ -82,11 +85,11 @@ class ProfilController extends Controller
     public function downloadSk()
     {
         $path = Setting::get('profil_sk_file');
-        if (!$path || !\Storage::disk('public')->exists($path)) {
+        if (!$path || !File::exists(public_path($path))) {
             abort(404, 'File SK PPID tidak ditemukan.');
         }
 
         $name = Setting::get('profil_sk_nama', 'SK_PPID.pdf');
-        return \Storage::disk('public')->download($path, $name);
+        return response()->download(public_path($path), $name);
     }
 }

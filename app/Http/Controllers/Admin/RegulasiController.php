@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Regulasi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 class RegulasiController extends Controller
@@ -71,7 +72,8 @@ class RegulasiController extends Controller
             if ($request->hasFile('file')) {
                 $file = $request->file('file');
                 $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
-                $data['file_path'] = $file->storeAs('uploads/regulasi', $fileName, 'public');
+                $file->move(public_path('uploads/regulasi'), $fileName);
+                $data['file_path'] = 'uploads/regulasi/' . $fileName;
                 $data['file_name'] = $file->getClientOriginalName();
             }
 
@@ -121,13 +123,14 @@ class RegulasiController extends Controller
             }
 
             if ($request->hasFile('file')) {
-                if ($regulasi->file_path && \Storage::disk('public')->exists($regulasi->file_path)) {
-                    \Storage::disk('public')->delete($regulasi->file_path);
+                if ($regulasi->file_path && File::exists(public_path($regulasi->file_path))) {
+                    File::delete(public_path($regulasi->file_path));
                 }
 
                 $file = $request->file('file');
                 $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
-                $data['file_path'] = $file->storeAs('uploads/regulasi', $fileName, 'public');
+                $file->move(public_path('uploads/regulasi'), $fileName);
+                $data['file_path'] = 'uploads/regulasi/' . $fileName;
                 $data['file_name'] = $file->getClientOriginalName();
             }
 
@@ -143,8 +146,8 @@ class RegulasiController extends Controller
     public function destroy(Regulasi $regulasi)
     {
         try {
-            if ($regulasi->file_path && \Storage::disk('public')->exists($regulasi->file_path)) {
-                \Storage::disk('public')->delete($regulasi->file_path);
+            if ($regulasi->file_path && File::exists(public_path($regulasi->file_path))) {
+                File::delete(public_path($regulasi->file_path));
             }
 
             $regulasi->delete();
