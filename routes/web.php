@@ -51,6 +51,8 @@ Route::prefix('profil')->name('profile.')->group(function () {
     Route::get('/sop-pendokumentasian', [ProfileController::class, 'sopPendokumentasian'])->name('sop-pendokumentasian');
     Route::get('/sk-ppid', [ProfileController::class, 'skPpid'])->name('sk-ppid');
     Route::get('/sk-ppid/download', [ProfileController::class, 'downloadSk'])->name('sk-ppid.download');
+    Route::get('/sop/{sop}/download', [ProfileController::class, 'sopDownload'])->name('sop.download');
+    Route::get('/sop/{sop}/view', [ProfileController::class, 'sopView'])->name('sop.view');
 });
 
 Route::prefix('informasi-publik')->name('informasi.')->group(function () {

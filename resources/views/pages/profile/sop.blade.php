@@ -40,10 +40,24 @@
                     </div>
                     <h3 class="font-bold text-navy mb-2">{{ $item->title }}</h3>
                     <p class="text-charcoal text-sm mb-4">{{ $item->deskripsi }}</p>
-                    <a href="{{ route('profile.sop') }}" class="inline-flex items-center text-primary text-sm font-semibold hover:underline">
-                        Lihat
-                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                    </a>
+                    @if($item->file_path)
+                        <div class="flex items-center gap-3 pt-3 border-t border-gray-100">
+                            <a href="{{ route('profile.sop.view', $item) }}" target="_blank" class="inline-flex items-center gap-1.5 text-primary hover:text-primary/80 text-sm font-semibold">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                Lihat
+                            </a>
+                            <span class="text-gray-300">|</span>
+                            <a href="{{ route('profile.sop.download', $item) }}" class="inline-flex items-center gap-1.5 text-accent hover:text-accent/80 text-sm font-semibold">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                Unduh
+                            </a>
+                        </div>
+                    @else
+                        <a href="{{ route('profile.sop') }}" class="inline-flex items-center text-primary text-sm font-semibold hover:underline">
+                            Lihat
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </a>
+                    @endif
                 </div>
             @empty
                 <div class="col-span-full bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center">

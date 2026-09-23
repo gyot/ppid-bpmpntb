@@ -96,4 +96,28 @@ class ProfileController extends Controller
         $name = Setting::get('profil_sk_nama', 'SK_PPID.pdf');
         return \Storage::disk('public')->download($path, $name);
     }
+
+    public function sopDownload(Sop $sop)
+    {
+        if (!$sop->file_path || !\Storage::disk('public')->exists($sop->file_path)) {
+            abort(404, 'File SOP tidak ditemukan.');
+        }
+
+        return \Storage::disk('public')->download($sop->file_path, $sop->file_name ?? basename($sop->file_path));
+    }
+
+    public function sopView(Sop $sop)
+    {
+        if (!$sop->file_path || !\Storage::disk('public')->exists($sop->file_path)) {
+            abort(404, 'File SOP tidak ditemukan.');
+        }
+
+        $path = \Storage::disk('public')->path($sop->file_path);
+        $mime = \Storage::disk('public')->mimeType($sop->file_path);
+
+        return response()->file($path, [
+            'Content-Type' => $mime,
+            'Content-Disposition' => 'inline; filename="' . ($sop->file_name ?? basename($sop->file_path)) . '"',
+        ]);
+    }
 }
