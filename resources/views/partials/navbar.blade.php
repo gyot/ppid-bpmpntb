@@ -79,6 +79,7 @@
                 </div>
 
                 <a href="{{ route('dokumen.index') }}" class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('dokumen.*') ? 'text-primary bg-primary/5' : 'text-gray-600 hover:text-primary hover:bg-gray-50' }}">Dokumen</a>
+                <a href="{{ route('berkala.regulasi') }}" class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('berkala.regulasi') ? 'text-primary bg-primary/5' : 'text-gray-600 hover:text-primary hover:bg-gray-50' }}">Regulasi</a>
                 <a href="{{ route('pengadaan.index') }}" class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('pengadaan.*') ? 'text-primary bg-primary/5' : 'text-gray-600 hover:text-primary hover:bg-gray-50' }}">Pengadaan</a>
                 <a href="{{ route('faq') }}" class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('faq') ? 'text-primary bg-primary/5' : 'text-gray-600 hover:text-primary hover:bg-gray-50' }}">FAQ</a>
                 <a href="{{ route('contact') }}" class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('contact*') ? 'text-primary bg-primary/5' : 'text-gray-600 hover:text-primary hover:bg-gray-50' }}">Kontak</a>
@@ -164,6 +165,7 @@
                 </div>
 
                 <a href="{{ route('dokumen.index') }}" class="px-4 py-2.5 text-sm font-medium text-gray-600 rounded-lg">Dokumen</a>
+                <a href="{{ route('berkala.regulasi') }}" class="px-4 py-2.5 text-sm font-medium text-gray-600 rounded-lg">Regulasi</a>
                 <a href="{{ route('pengadaan.index') }}" class="px-4 py-2.5 text-sm font-medium text-gray-600 rounded-lg">Pengadaan</a>
                 <a href="{{ route('faq') }}" class="px-4 py-2.5 text-sm font-medium text-gray-600 rounded-lg">FAQ</a>
                 <a href="{{ route('contact') }}" class="px-4 py-2.5 text-sm font-medium text-gray-600 rounded-lg">Kontak</a>
