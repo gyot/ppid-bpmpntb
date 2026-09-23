@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Sop;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 class SopController extends Controller
@@ -35,23 +36,36 @@ class SopController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'deskripsi' => 'required|string',
-            'konten' => 'required|string',
+            'konten' => 'nullable|string',
             'icon' => 'nullable|string|max:255',
+            'file' => 'nullable|file|max:10240|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx',
             'sort_order' => 'nullable|integer|min:0',
             'is_active' => 'boolean',
         ]);
 
         try {
-            Sop::create([
+            $data = [
                 'title' => $validated['title'],
                 'slug' => Str::slug($validated['title']) . '-' . Str::random(5),
                 'deskripsi' => $validated['deskripsi'],
-                'konten' => $validated['konten'],
+                'konten' => $validated['konten'] ?? '',
                 'icon' => $validated['icon'] ?? null,
                 'sort_order' => $validated['sort_order'] ?? 0,
                 'is_active' => $request->boolean('is_active', true),
                 'created_by' => auth()->id(),
-            ]);
+            ];
+
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+                $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
+                $file->storeAs('uploads/sop', $fileName, 'public');
+                $data['file_path'] = 'uploads/sop/' . $fileName;
+                $data['file_name'] = $file->getClientOriginalName();
+                $data['file_size'] = $file->getSize();
+                $data['mime_type'] = $file->getMimeType();
+            }
+
+            Sop::create($data);
 
             return redirect()->route('admin.sop.index')
                 ->with('success', 'SOP berhasil ditambahkan.');
@@ -71,21 +85,38 @@ class SopController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'deskripsi' => 'required|string',
-            'konten' => 'required|string',
+            'konten' => 'nullable|string',
             'icon' => 'nullable|string|max:255',
+            'file' => 'nullable|file|max:10240|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx',
             'sort_order' => 'nullable|integer|min:0',
             'is_active' => 'boolean',
         ]);
 
         try {
-            $sop->update([
+            $data = [
                 'title' => $validated['title'],
                 'deskripsi' => $validated['deskripsi'],
-                'konten' => $validated['konten'],
+                'konten' => $validated['konten'] ?? '',
                 'icon' => $validated['icon'] ?? null,
                 'sort_order' => $validated['sort_order'] ?? 0,
                 'is_active' => $request->boolean('is_active', true),
-            ]);
+            ];
+
+            if ($request->hasFile('file')) {
+                if ($sop->file_path && \Storage::disk('public')->exists($sop->file_path)) {
+                    \Storage::disk('public')->delete($sop->file_path);
+                }
+
+                $file = $request->file('file');
+                $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
+                $file->storeAs('uploads/sop', $fileName, 'public');
+                $data['file_path'] = 'uploads/sop/' . $fileName;
+                $data['file_name'] = $file->getClientOriginalName();
+                $data['file_size'] = $file->getSize();
+                $data['mime_type'] = $file->getMimeType();
+            }
+
+            $sop->update($data);
 
             return redirect()->route('admin.sop.index')
                 ->with('success', 'SOP berhasil diperbarui.');
@@ -97,6 +128,10 @@ class SopController extends Controller
     public function destroy(Sop $sop)
     {
         try {
+            if ($sop->file_path && \Storage::disk('public')->exists($sop->file_path)) {
+                \Storage::disk('public')->delete($sop->file_path);
+            }
+
             $sop->delete();
 
             return redirect()->route('admin.sop.index')
@@ -131,5 +166,59 @@ class SopController extends Controller
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
+    }
+
+    public function bulkCreate()
+    {
+        return view('admin.sop.bulk');
+    }
+
+    public function bulkStore(Request $request)
+    {
+        $validated = $request->validate([
+            'deskripsi' => 'nullable|string',
+            'files' => 'required|array|min:1',
+            'files.*' => 'required|file|max:10240|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx',
+        ]);
+
+        $created = 0;
+        $errors = [];
+        $maxOrder = Sop::max('sort_order') ?? 0;
+
+        foreach ($request->file('files') as $index => $file) {
+            try {
+                $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                $title = str_replace(['_', '-'], ' ', $originalName);
+                $title = ucwords($title);
+
+                $fileName = time() . '_' . $index . '_' . Str::slug($originalName) . '.' . $file->getClientOriginalExtension();
+                $file->storeAs('uploads/sop', $fileName, 'public');
+
+                Sop::create([
+                    'title' => $title,
+                    'slug' => Str::slug($title) . '-' . Str::random(5),
+                    'deskripsi' => $validated['deskripsi'] ?? $title,
+                    'konten' => '',
+                    'file_path' => 'uploads/sop/' . $fileName,
+                    'file_name' => $file->getClientOriginalName(),
+                    'file_size' => $file->getSize(),
+                    'mime_type' => $file->getMimeType(),
+                    'sort_order' => $maxOrder + $index + 1,
+                    'is_active' => true,
+                    'created_by' => auth()->id(),
+                ]);
+
+                $created++;
+            } catch (\Exception $e) {
+                $errors[] = $file->getClientOriginalName() . ': ' . $e->getMessage();
+            }
+        }
+
+        $message = "{$created} SOP berhasil ditambahkan.";
+        if (!empty($errors)) {
+            $message .= ' ' . count($errors) . ' file gagal: ' . implode(', ', $errors);
+        }
+
+        return redirect()->route('admin.sop.index')->with('success', $message);
     }
 }

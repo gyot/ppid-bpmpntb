@@ -12,7 +12,7 @@
 <div class="max-w-4xl">
     <h1 class="text-2xl font-bold text-gray-900 mb-6">Tambah SOP</h1>
 
-    <form action="{{ route('admin.sop.store') }}" method="POST" class="space-y-6">
+    <form action="{{ route('admin.sop.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
         @csrf
 
         <div class="card bg-white rounded-lg shadow p-6 space-y-4">
@@ -31,9 +31,16 @@
             </div>
 
             <div>
-                <label class="input-label block text-sm font-medium text-gray-700 mb-1">Konten / Langkah-langkah SOP <span class="text-red-500">*</span></label>
-                <textarea name="konten" rows="10" required class="input-field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary @error('konten') border-red-500 @enderror">{{ old('konten') }}</textarea>
+                <label class="input-label block text-sm font-medium text-gray-700 mb-1">Konten / Langkah-langkah SOP</label>
+                <textarea name="konten" rows="10" class="input-field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary @error('konten') border-red-500 @enderror">{{ old('konten') }}</textarea>
                 @error('konten')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+            </div>
+
+            <div>
+                <label class="input-label block text-sm font-medium text-gray-700 mb-1">File Dokumen</label>
+                <input type="file" name="file" class="input-field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary @error('file') border-red-500 @enderror">
+                <p class="text-xs text-gray-500 mt-1">Format: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX. Maks: 10MB</p>
+                @error('file')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
