@@ -185,6 +185,8 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::post('keuangan/{keuangan}/toggle-status', [AdminKeuanganController::class, 'toggleStatus'])->name('keuangan.toggle-status');
 
     Route::resource('pengadaan', AdminPengadaanController::class);
+    Route::get('pengadaan/bulk/create', [AdminPengadaanController::class, 'bulkCreate'])->name('pengadaan.bulk-create');
+    Route::post('pengadaan/bulk/store', [AdminPengadaanController::class, 'bulkStore'])->name('pengadaan.bulk-store');
     Route::post('pengadaan/{pengadaan}/toggle-status', [AdminPengadaanController::class, 'toggleStatus'])->name('pengadaan.toggle-status');
 
     Route::resource('sop', AdminSopController::class);

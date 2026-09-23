@@ -176,4 +176,57 @@ class PengadaanController extends Controller
             return back()->with('error', 'Gagal mengubah status: ' . $e->getMessage());
         }
     }
+
+    public function bulkCreate()
+    {
+        return view('admin.pengadaan.bulk');
+    }
+
+    public function bulkStore(Request $request)
+    {
+        $validated = $request->validate([
+            'tahun' => 'required|integer|min:2000|max:' . (date('Y') + 2),
+            'tahap' => 'required|in:rencana,pemilihan,pelaksanaan',
+            'status' => 'required|in:draft,published',
+            'files' => 'required|array|min:1',
+            'files.*' => 'required|file|max:10240|mimes:pdf,doc,docx,xls,xlsx',
+        ]);
+
+        $created = 0;
+        $errors = [];
+
+        foreach ($request->file('files') as $file) {
+            try {
+                $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                $title = str_replace(['_', '-'], ' ', $originalName);
+                $title = ucwords($title);
+
+                $fileName = time() . '_' . Str::slug($originalName) . '.' . $file->getClientOriginalExtension();
+                $file->storeAs('uploads/pengadaan', $fileName, 'public');
+
+                Pengadaan::create([
+                    'nama_paket' => $title,
+                    'tahun' => $validated['tahun'],
+                    'tahap' => $validated['tahap'],
+                    'deskripsi' => $title,
+                    'file_path' => 'uploads/pengadaan/' . $fileName,
+                    'file_name' => $file->getClientOriginalName(),
+                    'status' => $validated['status'],
+                    'published_at' => $validated['status'] === 'published' ? now() : null,
+                    'created_by' => auth()->id(),
+                ]);
+
+                $created++;
+            } catch (\Exception $e) {
+                $errors[] = $file->getClientOriginalName() . ': ' . $e->getMessage();
+            }
+        }
+
+        $message = "{$created} data pengadaan berhasil ditambahkan.";
+        if (!empty($errors)) {
+            $message .= ' ' . count($errors) . ' file gagal: ' . implode(', ', $errors);
+        }
+
+        return redirect()->route('admin.pengadaan.index')->with('success', $message);
+    }
 }
