@@ -30,8 +30,8 @@
                     <label class="input-label block text-sm font-medium text-gray-700 mb-1">Kategori <span class="text-red-500">*</span></label>
                     <select name="category" required class="input-field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary @error('category') border-red-500 @enderror">
                         <option value="">Pilih Kategori</option>
-                        @foreach(['informasi berkala','informasi serta merta','informasi setiap saat'] as $cat)
-                            <option value="{{ $cat }}" {{ old('category', $item->category) == $cat ? 'selected' : '' }}>{{ ucfirst($cat) }}</option>
+                        @foreach(['berkala','serta_merta','setiap_saat','dikecualikan'] as $cat)
+                            <option value="{{ $cat }}" {{ old('category', $item->category) == $cat ? 'selected' : '' }}>{{ ucfirst(str_replace('_', ' ', $cat)) }}</option>
                         @endforeach
                     </select>
                     @error('category')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror

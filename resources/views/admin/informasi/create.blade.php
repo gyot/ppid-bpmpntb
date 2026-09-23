@@ -29,9 +29,10 @@
                     <label class="input-label block text-sm font-medium text-gray-700 mb-1">Kategori <span class="text-red-500">*</span></label>
                     <select name="category" required class="input-field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary @error('category') border-red-500 @enderror">
                         <option value="">Pilih Kategori</option>
-                        <option value="informasi berkala" {{ old('category') == 'informasi berkala' ? 'selected' : '' }}>Informasi Berkala</option>
-                        <option value="informasi serta merta" {{ old('category') == 'informasi serta merta' ? 'selected' : '' }}>Informasi Serta Merta</option>
-                        <option value="informasi setiap saat" {{ old('category') == 'informasi setiap saat' ? 'selected' : '' }}>Informasi Setiap Saat</option>
+                        <option value="berkala" {{ old('category') == 'berkala' ? 'selected' : '' }}>Informasi Berkala</option>
+                        <option value="serta_merta" {{ old('category') == 'serta_merta' ? 'selected' : '' }}>Informasi Serta Merta</option>
+                        <option value="setiap_saat" {{ old('category') == 'setiap_saat' ? 'selected' : '' }}>Informasi Setiap Saat</option>
+                        <option value="dikecualikan" {{ old('category') == 'dikecualikan' ? 'selected' : '' }}>Informasi Dikecualikan</option>
                     </select>
                     @error('category')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                 </div>

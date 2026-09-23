@@ -169,4 +169,36 @@ class InformationController extends Controller
 
         return view('pages.informasi.dip-online', compact('dip'));
     }
+
+    public function download($slug)
+    {
+        $informasi = InformationPublik::where('slug', $slug)
+            ->where('status', 'published')
+            ->firstOrFail();
+
+        if (!$informasi->file_path || !\Storage::disk('public')->exists($informasi->file_path)) {
+            abort(404);
+        }
+
+        return \Storage::disk('public')->download($informasi->file_path, $informasi->file_name ?? basename($informasi->file_path));
+    }
+
+    public function viewFile($slug)
+    {
+        $informasi = InformationPublik::where('slug', $slug)
+            ->where('status', 'published')
+            ->firstOrFail();
+
+        if (!$informasi->file_path || !\Storage::disk('public')->exists($informasi->file_path)) {
+            abort(404);
+        }
+
+        $path = \Storage::disk('public')->path($informasi->file_path);
+        $mime = \Storage::disk('public')->mimeType($informasi->file_path);
+
+        return response()->file($path, [
+            'Content-Type' => $mime,
+            'Content-Disposition' => 'inline; filename="' . ($informasi->file_name ?? basename($informasi->file_path)) . '"',
+        ]);
+    }
 }

@@ -61,6 +61,8 @@ Route::prefix('informasi-publik')->name('informasi.')->group(function () {
     Route::get('/dikecualikan', [InformationController::class, 'dikecualikan'])->name('dikecualikan');
     Route::get('/dip-online', [InformationController::class, 'dipOnline'])->name('dip-online');
     Route::get('/daftar', [InformationController::class, 'daftarInformasi'])->name('daftar');
+    Route::get('/{slug}/download', [InformationController::class, 'download'])->name('download');
+    Route::get('/{slug}/view', [InformationController::class, 'viewFile'])->name('view');
     Route::get('/{slug}', [InformationController::class, 'show'])->name('show');
 });
 
@@ -125,9 +127,13 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('informasi', AdminInformationController::class);
+    Route::get('informasi/bulk/create', [AdminInformationController::class, 'bulkCreate'])->name('informasi.bulk-create');
+    Route::post('informasi/bulk/store', [AdminInformationController::class, 'bulkStore'])->name('informasi.bulk-store');
     Route::post('informasi/{id}/toggle-status', [AdminInformationController::class, 'toggleStatus'])->name('informasi.toggle-status');
 
     Route::resource('dokumen', AdminDocumentController::class);
+    Route::get('dokumen/bulk/create', [AdminDocumentController::class, 'bulkCreate'])->name('dokumen.bulk-create');
+    Route::post('dokumen/bulk/store', [AdminDocumentController::class, 'bulkStore'])->name('dokumen.bulk-store');
     Route::post('dokumen/{id}/toggle-status', [AdminDocumentController::class, 'toggleStatus'])->name('dokumen.toggle-status');
 
     Route::resource('berita', AdminNewsController::class);

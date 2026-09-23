@@ -10,10 +10,16 @@
 <div class="space-y-6">
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <h1 class="text-2xl font-bold text-gray-900">Kelola Dokumen</h1>
-        <a href="{{ route('admin.dokumen.create') }}" class="btn-primary inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 text-sm">
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
-            Tambah Dokumen
-        </a>
+        <div class="flex items-center gap-2">
+            <a href="{{ route('admin.dokumen.create') }}" class="btn-primary inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 text-sm">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                Tambah Dokumen
+            </a>
+            <a href="{{ route('admin.dokumen.bulk-create') }}" class="inline-flex items-center px-4 py-2 border border-primary text-primary rounded-lg hover:bg-primary/5 text-sm">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                Upload Massal
+            </a>
+        </div>
     </div>
 
     <div class="card bg-white rounded-lg shadow p-4">
@@ -21,8 +27,11 @@
             <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari dokumen..." class="input-field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary">
             <select name="category" class="input-field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary">
                 <option value="">Semua Kategori</option>
-                @foreach(['peraturan','laporan','surat edaran','pedoman','lainnya'] as $cat)
-                    <option value="{{ $cat }}" {{ request('category') == $cat ? 'selected' : '' }}>{{ ucfirst($cat) }}</option>
+                @php
+                    $categories = ['regulasi' => 'Regulasi', 'sk' => 'SK', 'sop' => 'SOP', 'laporan' => 'Laporan', 'dip' => 'DIP', 'statistik' => 'Statistik', 'formulir' => 'Formulir', 'dokumen_ppid' => 'Dokumen PPID'];
+                @endphp
+                @foreach($categories as $value => $label)
+                    <option value="{{ $value }}" {{ request('category') == $value ? 'selected' : '' }}>{{ $label }}</option>
                 @endforeach
             </select>
             <select name="year" class="input-field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary">

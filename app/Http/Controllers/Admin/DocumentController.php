@@ -170,6 +170,62 @@ class DocumentController extends Controller
         }
     }
 
+    public function bulkCreate()
+    {
+        return view('admin.dokumen.bulk');
+    }
+
+    public function bulkStore(Request $request)
+    {
+        $validated = $request->validate([
+            'category' => 'required|in:regulasi,sk,sop,laporan,dip,statistik,formulir,dokumen_ppid',
+            'year' => 'required|integer|min:2000|max:' . (date('Y') + 1),
+            'status' => 'required|in:draft,published',
+            'files' => 'required|array|min:1',
+            'files.*' => 'required|file|max:10240|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx',
+        ]);
+
+        $created = 0;
+        $errors = [];
+
+        foreach ($request->file('files') as $file) {
+            try {
+                $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                $title = str_replace(['_', '-'], ' ', $originalName);
+                $title = ucwords($title);
+
+                $fileName = time() . '_' . Str::slug($originalName) . '.' . $file->getClientOriginalExtension();
+                $filePath = $file->storeAs('uploads/documents', $fileName, 'public');
+
+                Document::create([
+                    'title' => $title,
+                    'slug' => Str::slug($title) . '-' . Str::random(5),
+                    'category' => $validated['category'],
+                    'year' => $validated['year'],
+                    'description' => $title,
+                    'file_path' => $filePath,
+                    'file_name' => $file->getClientOriginalName(),
+                    'file_size' => $file->getSize(),
+                    'mime_type' => $file->getMimeType(),
+                    'status' => $validated['status'],
+                    'published_at' => $validated['status'] === 'published' ? now() : null,
+                    'created_by' => auth()->id(),
+                ]);
+
+                $created++;
+            } catch (\Exception $e) {
+                $errors[] = $file->getClientOriginalName() . ': ' . $e->getMessage();
+            }
+        }
+
+        $message = "{$created} dokumen berhasil ditambahkan.";
+        if (!empty($errors)) {
+            $message .= ' ' . count($errors) . ' file gagal: ' . implode(', ', $errors);
+        }
+
+        return redirect()->route('admin.dokumen.index')->with('success', $message);
+    }
+
     public function incrementDownload(Document $dokuman)
     {
         try {
