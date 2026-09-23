@@ -72,6 +72,8 @@ class InformationController extends Controller
         try {
             $file = $request->file('file');
             $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
+            $fileSize = $file->getSize();
+            $mimeType = $file->getMimeType();
             $file->move(public_path('uploads/informasi'), $fileName);
             $filePath = 'uploads/informasi/' . $fileName;
 
@@ -83,8 +85,8 @@ class InformationController extends Controller
                 'description' => $validated['description'] ?? null,
                 'file_path' => $filePath,
                 'file_name' => $file->getClientOriginalName(),
-                'file_size' => $file->getSize(),
-                'mime_type' => $file->getMimeType(),
+                'file_size' => $fileSize,
+                'mime_type' => $mimeType,
                 'unit_pengelola' => $validated['unit_pengelola'] ?? null,
                 'status' => $validated['status'],
                 'published_at' => $validated['status'] === 'published' ? now() : null,
@@ -150,11 +152,14 @@ class InformationController extends Controller
 
                 $file = $request->file('file');
                 $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
+                $fileSize = $file->getSize();
+                $mimeType = $file->getMimeType();
+                $originalName = $file->getClientOriginalName();
                 $file->move(public_path('uploads/informasi'), $fileName);
                 $data['file_path'] = 'uploads/informasi/' . $fileName;
-                $data['file_name'] = $file->getClientOriginalName();
-                $data['file_size'] = $file->getSize();
-                $data['mime_type'] = $file->getMimeType();
+                $data['file_name'] = $originalName;
+                $data['file_size'] = $fileSize;
+                $data['mime_type'] = $mimeType;
             }
 
             $informasi->update($data);
@@ -224,6 +229,8 @@ class InformationController extends Controller
                 $title = ucwords($title);
 
                 $fileName = time() . '_' . Str::slug($originalName) . '.' . $file->getClientOriginalExtension();
+                $fileSize = $file->getSize();
+                $mimeType = $file->getMimeType();
                 $file->move(public_path('uploads/informasi'), $fileName);
                 $filePath = 'uploads/informasi/' . $fileName;
 
@@ -235,8 +242,8 @@ class InformationController extends Controller
                     'description' => $title,
                     'file_path' => $filePath,
                     'file_name' => $file->getClientOriginalName(),
-                    'file_size' => $file->getSize(),
-                    'mime_type' => $file->getMimeType(),
+                    'file_size' => $fileSize,
+                    'mime_type' => $mimeType,
                     'unit_pengelola' => $validated['unit_pengelola'] ?? null,
                     'status' => $validated['status'],
                     'published_at' => $validated['status'] === 'published' ? now() : null,

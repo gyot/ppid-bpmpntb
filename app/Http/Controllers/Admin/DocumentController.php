@@ -58,6 +58,9 @@ class DocumentController extends Controller
         try {
             $file = $request->file('file');
             $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
+            $fileSize = $file->getSize();
+            $mimeType = $file->getMimeType();
+            $originalName = $file->getClientOriginalName();
             $file->move(public_path('uploads/documents'), $fileName);
             $filePath = 'uploads/documents/' . $fileName;
 
@@ -68,9 +71,9 @@ class DocumentController extends Controller
                 'year' => $validated['year'],
                 'description' => $validated['description'] ?? null,
                 'file_path' => $filePath,
-                'file_name' => $file->getClientOriginalName(),
-                'file_size' => $file->getSize(),
-                'mime_type' => $file->getMimeType(),
+                'file_name' => $originalName,
+                'file_size' => $fileSize,
+                'mime_type' => $mimeType,
                 'status' => $validated['status'],
                 'published_at' => $validated['status'] === 'published' ? now() : null,
                 'created_by' => auth()->id(),
@@ -125,11 +128,14 @@ class DocumentController extends Controller
 
                 $file = $request->file('file');
                 $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
+                $fileSize = $file->getSize();
+                $mimeType = $file->getMimeType();
+                $originalName = $file->getClientOriginalName();
                 $file->move(public_path('uploads/documents'), $fileName);
                 $data['file_path'] = 'uploads/documents/' . $fileName;
-                $data['file_name'] = $file->getClientOriginalName();
-                $data['file_size'] = $file->getSize();
-                $data['mime_type'] = $file->getMimeType();
+                $data['file_name'] = $originalName;
+                $data['file_size'] = $fileSize;
+                $data['mime_type'] = $mimeType;
             }
 
             $dokuman->update($data);
@@ -198,6 +204,9 @@ class DocumentController extends Controller
                 $title = ucwords($title);
 
                 $fileName = time() . '_' . Str::slug($originalName) . '.' . $file->getClientOriginalExtension();
+                $fileSize = $file->getSize();
+                $mimeType = $file->getMimeType();
+                $fileOriginalName = $file->getClientOriginalName();
                 $file->move(public_path('uploads/documents'), $fileName);
                 $filePath = 'uploads/documents/' . $fileName;
 
@@ -208,9 +217,9 @@ class DocumentController extends Controller
                     'year' => $validated['year'],
                     'description' => $title,
                     'file_path' => $filePath,
-                    'file_name' => $file->getClientOriginalName(),
-                    'file_size' => $file->getSize(),
-                    'mime_type' => $file->getMimeType(),
+                    'file_name' => $fileOriginalName,
+                    'file_size' => $fileSize,
+                    'mime_type' => $mimeType,
                     'status' => $validated['status'],
                     'published_at' => $validated['status'] === 'published' ? now() : null,
                     'created_by' => auth()->id(),

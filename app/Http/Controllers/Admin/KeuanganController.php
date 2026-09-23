@@ -54,6 +54,8 @@ class KeuanganController extends Controller
         try {
             $file = $request->file('file');
             $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
+            $fileSize = $file->getSize();
+            $originalName = $file->getClientOriginalName();
             $file->move(public_path('uploads/keuangan'), $fileName);
             $filePath = 'uploads/keuangan/' . $fileName;
 
@@ -64,8 +66,8 @@ class KeuanganController extends Controller
                 'tahun' => $validated['tahun'],
                 'deskripsi' => $validated['deskripsi'] ?? null,
                 'file_path' => $filePath,
-                'file_name' => $file->getClientOriginalName(),
-                'file_size' => $file->getSize(),
+                'file_name' => $originalName,
+                'file_size' => $fileSize,
                 'status' => $validated['status'],
                 'published_at' => $validated['status'] === 'published' ? now() : null,
                 'created_by' => auth()->id(),
@@ -115,10 +117,12 @@ class KeuanganController extends Controller
 
                 $file = $request->file('file');
                 $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
+                $fileSize = $file->getSize();
+                $originalName = $file->getClientOriginalName();
                 $file->move(public_path('uploads/keuangan'), $fileName);
                 $data['file_path'] = 'uploads/keuangan/' . $fileName;
-                $data['file_name'] = $file->getClientOriginalName();
-                $data['file_size'] = $file->getSize();
+                $data['file_name'] = $originalName;
+                $data['file_size'] = $fileSize;
             }
 
             $keuangan->update($data);
