@@ -186,8 +186,6 @@ class RegulasiController extends Controller
 
             $header = array_map('strtolower', array_map('trim', $rows[0]));
 
-            $colJenis = array_search('jenis regulasi', $colNama = array_search('nama peraturan', $colStatusBerlaku = array_search('status berlaku', $colLink = array_search('link eksternal (opsional)', $colPublikasi = array_search('status publikasi', $header)))));
-            // Re-parse headers properly
             $colJenis = null; $colNama = null; $colStatusBerlaku = null; $colLink = null; $colPublikasi = null;
             foreach ($header as $i => $h) {
                 if (str_contains($h, 'jenis regulasi')) $colJenis = $i;
