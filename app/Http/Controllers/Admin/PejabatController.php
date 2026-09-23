@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Pejabat;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 
 class PejabatController extends Controller
 {
@@ -33,8 +32,7 @@ class PejabatController extends Controller
         if ($request->hasFile('foto')) {
             $file = $request->file('foto');
             $fileName = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('uploads/pejabat'), $fileName);
-            $validated['foto'] = 'uploads/pejabat/' . $fileName;
+            $validated['foto'] = $file->storeAs('uploads/pejabat', $fileName, 'public');
         }
 
         $validated['sort_order'] = $validated['sort_order'] ?? 0;
@@ -60,13 +58,12 @@ class PejabatController extends Controller
         ]);
 
         if ($request->hasFile('foto')) {
-            if ($pejabat->foto && File::exists(public_path($pejabat->foto))) {
-                File::delete(public_path($pejabat->foto));
+            if ($pejabat->foto && \Storage::disk('public')->exists($pejabat->foto)) {
+                \Storage::disk('public')->delete($pejabat->foto);
             }
             $file = $request->file('foto');
             $fileName = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('uploads/pejabat'), $fileName);
-            $validated['foto'] = 'uploads/pejabat/' . $fileName;
+            $validated['foto'] = $file->storeAs('uploads/pejabat', $fileName, 'public');
         }
 
         $pejabat->update($validated);
@@ -76,8 +73,8 @@ class PejabatController extends Controller
 
     public function destroy(Pejabat $pejabat)
     {
-        if ($pejabat->foto && File::exists(public_path($pejabat->foto))) {
-            File::delete(public_path($pejabat->foto));
+        if ($pejabat->foto && \Storage::disk('public')->exists($pejabat->foto)) {
+            \Storage::disk('public')->delete($pejabat->foto);
         }
         $pejabat->delete();
         return redirect()->route('admin.pejabat.index')->with('success', 'Data pejabat berhasil dihapus.');

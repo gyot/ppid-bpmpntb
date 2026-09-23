@@ -49,7 +49,7 @@
                 <label class="input-label block text-sm font-medium text-gray-700 mb-1">Gambar Utama</label>
                 @if($item->image)
                     <div class="mb-2">
-                        <img src="{{ '/' . $item->image }}" alt="{{ $item->title }}" class="w-32 h-20 object-cover rounded">
+                        <img src="{{ Storage::url($item->image) }}" alt="{{ $item->title }}" class="w-32 h-20 object-cover rounded">
                     </div>
                 @endif
                 <input type="file" name="image" accept="image/*" class="input-field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary @error('image') border-red-500 @enderror">

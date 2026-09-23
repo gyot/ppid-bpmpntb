@@ -24,7 +24,7 @@ class Pejabat extends Model
     public function getFotoUrlAttribute(): ?string
     {
         if ($this->foto) {
-            return '/' . $this->foto;
+            return \Storage::disk('public')->url($this->foto);
         }
         return null;
     }

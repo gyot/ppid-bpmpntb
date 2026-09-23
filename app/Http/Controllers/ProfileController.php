@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Pejabat;
 use App\Models\Setting;
 use App\Models\Sop;
-use Illuminate\Support\Facades\File;
 
 class ProfileController extends Controller
 {
@@ -36,8 +35,8 @@ class ProfileController extends Controller
     {
         $strukturUrl = null;
         $strukturPath = Setting::get('profil_struktur_gambar');
-        if ($strukturPath && File::exists(public_path($strukturPath))) {
-            $strukturUrl = '/' . $strukturPath;
+        if ($strukturPath && \Storage::disk('public')->exists($strukturPath)) {
+            $strukturUrl = \Storage::disk('public')->url($strukturPath);
         }
         return view('pages.profile.struktur-organisasi', compact('strukturUrl'));
     }
@@ -91,10 +90,10 @@ class ProfileController extends Controller
     public function downloadSk()
     {
         $path = Setting::get('profil_sk_file');
-        if (!$path || !File::exists(public_path($path))) {
+        if (!$path || !\Storage::disk('public')->exists($path)) {
             abort(404, 'File SK PPID tidak ditemukan.');
         }
         $name = Setting::get('profil_sk_nama', 'SK_PPID.pdf');
-        return response()->download(public_path($path), $name);
+        return \Storage::disk('public')->download($path, $name);
     }
 }

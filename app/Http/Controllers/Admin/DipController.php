@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\DaftarInformasiPublik;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 class DipController extends Controller
@@ -72,8 +71,7 @@ class DipController extends Controller
             if ($request->hasFile('file')) {
                 $file = $request->file('file');
                 $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
-                $file->move(public_path('uploads/dip'), $fileName);
-                $data['file_path'] = 'uploads/dip/' . $fileName;
+                $data['file_path'] = $file->storeAs('uploads/dip', $fileName, 'public');
                 $data['file_name'] = $file->getClientOriginalName();
             }
 
@@ -119,14 +117,13 @@ class DipController extends Controller
             ];
 
             if ($request->hasFile('file')) {
-                if ($dip->file_path && File::exists(public_path($dip->file_path))) {
-                    File::delete(public_path($dip->file_path));
+                if ($dip->file_path && \Storage::disk('public')->exists($dip->file_path)) {
+                    \Storage::disk('public')->delete($dip->file_path);
                 }
 
                 $file = $request->file('file');
                 $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
-                $file->move(public_path('uploads/dip'), $fileName);
-                $data['file_path'] = 'uploads/dip/' . $fileName;
+                $data['file_path'] = $file->storeAs('uploads/dip', $fileName, 'public');
                 $data['file_name'] = $file->getClientOriginalName();
             }
 
@@ -142,8 +139,8 @@ class DipController extends Controller
     public function destroy(DaftarInformasiPublik $dip)
     {
         try {
-            if ($dip->file_path && File::exists(public_path($dip->file_path))) {
-                File::delete(public_path($dip->file_path));
+            if ($dip->file_path && \Storage::disk('public')->exists($dip->file_path)) {
+                \Storage::disk('public')->delete($dip->file_path);
             }
 
             $dip->delete();

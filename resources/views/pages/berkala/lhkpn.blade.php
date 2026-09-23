@@ -55,7 +55,7 @@
                                 <td class="px-6 py-4 text-sm text-charcoal">{{ $item->periode }}</td>
                                 <td class="px-6 py-4 text-sm">
                                     @if($item->file_path)
-                                        <a href="{{ '/' . $item->file_path }}" target="_blank" class="text-primary font-medium hover:underline">Unduh</a>
+                                        <a href="{{ Storage::url($item->file_path) }}" target="_blank" class="text-primary font-medium hover:underline">Unduh</a>
                                     @else
                                         <span class="text-gray-400">-</span>
                                     @endif

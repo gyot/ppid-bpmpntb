@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Pengadaan;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 class PengadaanController extends Controller
@@ -76,8 +75,7 @@ class PengadaanController extends Controller
             if ($request->hasFile('file')) {
                 $file = $request->file('file');
                 $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
-                $file->move(public_path('uploads/pengadaan'), $fileName);
-                $data['file_path'] = 'uploads/pengadaan/' . $fileName;
+                $data['file_path'] = $file->storeAs('uploads/pengadaan', $fileName, 'public');
                 $data['file_name'] = $file->getClientOriginalName();
             }
 
@@ -129,14 +127,13 @@ class PengadaanController extends Controller
             }
 
             if ($request->hasFile('file')) {
-                if ($pengadaan->file_path && File::exists(public_path($pengadaan->file_path))) {
-                    File::delete(public_path($pengadaan->file_path));
+                if ($pengadaan->file_path && \Storage::disk('public')->exists($pengadaan->file_path)) {
+                    \Storage::disk('public')->delete($pengadaan->file_path);
                 }
 
                 $file = $request->file('file');
                 $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
-                $file->move(public_path('uploads/pengadaan'), $fileName);
-                $data['file_path'] = 'uploads/pengadaan/' . $fileName;
+                $data['file_path'] = $file->storeAs('uploads/pengadaan', $fileName, 'public');
                 $data['file_name'] = $file->getClientOriginalName();
             }
 
@@ -152,8 +149,8 @@ class PengadaanController extends Controller
     public function destroy(Pengadaan $pengadaan)
     {
         try {
-            if ($pengadaan->file_path && File::exists(public_path($pengadaan->file_path))) {
-                File::delete(public_path($pengadaan->file_path));
+            if ($pengadaan->file_path && \Storage::disk('public')->exists($pengadaan->file_path)) {
+                \Storage::disk('public')->delete($pengadaan->file_path);
             }
 
             $pengadaan->delete();
