@@ -61,7 +61,17 @@ class ProfileController extends Controller
 
     public function sop()
     {
-        $sops = Sop::where('is_active', true)->orderBy('sort_order')->get();
+        $query = Sop::where('is_active', true)->orderBy('sort_order');
+
+        if (request('search')) {
+            $search = request('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('deskripsi', 'like', "%{$search}%");
+            });
+        }
+
+        $sops = $query->get();
         return view('pages.profile.sop', compact('sops'));
     }
 
