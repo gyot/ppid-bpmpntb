@@ -19,6 +19,7 @@ class Regulasi extends Model
         'kategori',
         'tanggal',
         'deskripsi',
+        'status_berlaku',
         'file_path',
         'file_name',
         'link_eksternal',

@@ -10,30 +10,38 @@
 <div class="space-y-6">
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <h1 class="text-2xl font-bold text-gray-900">Regulasi & Kebijakan</h1>
-        <a href="{{ route('admin.regulasi.create') }}" class="btn-primary inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 text-sm">
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
-            Tambah Regulasi
-        </a>
+        <div class="flex items-center gap-2">
+            <a href="{{ route('admin.regulasi.create') }}" class="btn-primary inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 text-sm">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                Tambah Regulasi
+            </a>
+            <a href="{{ route('admin.regulasi.import-form') }}" class="inline-flex items-center px-4 py-2 border border-primary text-primary rounded-lg hover:bg-primary/5 text-sm">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                Import Excel
+            </a>
+        </div>
     </div>
 
     <div class="card bg-white rounded-lg shadow p-4">
         <form method="GET" class="grid grid-cols-1 sm:grid-cols-4 gap-3">
             <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari regulasi..." class="input-field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary">
             <select name="kategori" class="input-field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary">
-                <option value="">Semua Kategori</option>
-                <option value="uu" {{ request('kategori') == 'uu' ? 'selected' : '' }}>Undang-Undang</option>
-                <option value="pp" {{ request('kategori') == 'pp' ? 'selected' : '' }}>Peraturan Pemerintah</option>
-                <option value="perma" {{ request('kategori') == 'perma' ? 'selected' : '' }}>Peraturan MA</option>
-                <option value="perki" {{ request('kategori') == 'perki' ? 'selected' : '' }}>Peraturan KI</option>
-                <option value="permendikbud" {{ request('kategori') == 'permendikbud' ? 'selected' : '' }}>Permendikbud</option>
-                <option value="lainnya" {{ request('kategori') == 'lainnya' ? 'selected' : '' }}>Lainnya</option>
+                <option value="">Semua Jenis</option>
+                @foreach(['Undang-Undang','Peraturan Pemerintah','Peraturan Presiden','Peraturan Menteri','Peraturan Daerah','Keputusan','Lainnya'] as $cat)
+                    <option value="{{ $cat }}" {{ request('kategori') == $cat ? 'selected' : '' }}>{{ $cat }}</option>
+                @endforeach
+            </select>
+            <select name="status_berlaku" class="input-field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary">
+                <option value="">Semua Status Berlaku</option>
+                <option value="berlaku" {{ request('status_berlaku') == 'berlaku' ? 'selected' : '' }}>Berlaku</option>
+                <option value="tidak_berlaku" {{ request('status_berlaku') == 'tidak_berlaku' ? 'selected' : '' }}>Tidak Berlaku</option>
             </select>
             <select name="status" class="input-field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary">
                 <option value="">Semua Status</option>
                 <option value="draft" {{ request('status') == 'draft' ? 'selected' : '' }}>Draft</option>
                 <option value="published" {{ request('status') == 'published' ? 'selected' : '' }}>Published</option>
             </select>
-            <div class="flex gap-2">
+            <div class="sm:col-span-4 flex gap-2">
                 <button type="submit" class="btn-primary px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 text-sm">Filter</button>
                 <a href="{{ route('admin.regulasi.index') }}" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 text-sm">Reset</a>
             </div>
@@ -45,26 +53,43 @@
             <table class="table-custom w-full text-sm">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th class="text-left py-3 px-4 font-medium text-gray-500">Judul</th>
-                        <th class="text-left py-3 px-4 font-medium text-gray-500">Kategori</th>
-                        <th class="text-left py-3 px-4 font-medium text-gray-500">Nomor</th>
-                        <th class="text-left py-3 px-4 font-medium text-gray-500">Tanggal</th>
-                        <th class="text-left py-3 px-4 font-medium text-gray-500">Status</th>
+                        <th class="text-left py-3 px-4 font-medium text-gray-500">Jenis Regulasi</th>
+                        <th class="text-left py-3 px-4 font-medium text-gray-500">Nama Peraturan</th>
+                        <th class="text-left py-3 px-4 font-medium text-gray-500">Status Berlaku</th>
+                        <th class="text-center py-3 px-4 font-medium text-gray-500">File</th>
+                        <th class="text-center py-3 px-4 font-medium text-gray-500">Link</th>
+                        <th class="text-left py-3 px-4 font-medium text-gray-500">Publikasi</th>
                         <th class="text-right py-3 px-4 font-medium text-gray-500">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($regulasis as $item)
                         <tr class="border-b border-gray-100 hover:bg-gray-50">
+                            <td class="py-3 px-4"><span class="badge-primary text-xs px-2 py-1 rounded-full">{{ $item->kategori }}</span></td>
+                            <td class="py-3 px-4 font-medium">{{ Str::limit($item->title, 50) }}</td>
                             <td class="py-3 px-4">
-                                <div>{{ Str::limit($item->title, 50) }}</div>
-                                @if($item->pembuat)
-                                    <div class="text-xs text-gray-400">{{ $item->pembuat }}</div>
+                                <span class="text-xs px-2 py-1 rounded-full {{ $item->status_berlaku == 'berlaku' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                                    {{ $item->status_berlaku == 'berlaku' ? 'Berlaku' : 'Tidak Berlaku' }}
+                                </span>
+                            </td>
+                            <td class="py-3 px-4 text-center">
+                                @if($item->file_path)
+                                    <a href="{{ Storage::url($item->file_path) }}" target="_blank" class="text-primary hover:underline text-xs">
+                                        <svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                    </a>
+                                @else
+                                    <span class="text-gray-400 text-xs">-</span>
                                 @endif
                             </td>
-                            <td class="py-3 px-4"><span class="badge-primary text-xs px-2 py-1 rounded-full">{{ $item->kategori_label }}</span></td>
-                            <td class="py-3 px-4">{{ $item->nomor ?? '-' }}</td>
-                            <td class="py-3 px-4">{{ $item->tanggal?->format('d M Y') ?? '-' }}</td>
+                            <td class="py-3 px-4 text-center">
+                                @if($item->link_eksternal)
+                                    <a href="{{ $item->link_eksternal }}" target="_blank" class="text-primary hover:underline text-xs">
+                                        <svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                                    </a>
+                                @else
+                                    <span class="text-gray-400 text-xs">-</span>
+                                @endif
+                            </td>
                             <td class="py-3 px-4">
                                 <span class="badge-{{ $item->status === 'published' ? 'success' : 'warning' }} text-xs px-2 py-1 rounded-full">{{ ucfirst($item->status) }}</span>
                             </td>
@@ -86,7 +111,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="6" class="py-8 text-center text-gray-400">Tidak ada data regulasi</td></tr>
+                        <tr><td colspan="7" class="py-8 text-center text-gray-400">Tidak ada data regulasi</td></tr>
                     @endforelse
                 </tbody>
             </table>

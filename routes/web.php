@@ -193,6 +193,8 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::post('sop/{sop}/toggle-active', [AdminSopController::class, 'toggleActive'])->name('sop.toggle-active');
 
     Route::resource('regulasi', AdminRegulasiController::class);
+    Route::get('regulasi-import', [AdminRegulasiController::class, 'importForm'])->name('regulasi.import-form');
+    Route::post('regulasi-import', [AdminRegulasiController::class, 'import'])->name('regulasi.import');
     Route::post('regulasi/{regulasi}/toggle-status', [AdminRegulasiController::class, 'toggleStatus'])->name('regulasi.toggle-status');
 
     Route::resource('pejabat', AdminPejabatController::class);
