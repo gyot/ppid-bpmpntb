@@ -35,7 +35,7 @@
                         <a href="{{ route('profile.sop') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors">SOP Pelayanan</a>
                         <a href="{{ route('profile.sk-ppid') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors font-medium">SK PPID</a>
                         <hr class="my-1 border-gray-100">
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors font-medium">SK PPID</a>
+                        {{-- <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors font-medium">SK PPID</a> --}}
                     </div>
                 </div>
 
@@ -52,11 +52,11 @@
                         <a href="{{ route('informasi.serta-merta') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors">Informasi Serta Merta</a>
                         <a href="{{ route('informasi.dikecualikan') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors">Informasi Dikecualikan</a>
                         <hr class="my-1 border-gray-100">
-                        <a href="{{ route('berkala.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors font-medium">Informasi Wajib Berkala</a>
+                        {{-- <a href="{{ route('berkala.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors font-medium">Informasi Wajib Berkala</a>
                         <a href="{{ route('berkala.profil') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors pl-6">- Profil Badan Publik</a>
                         <a href="{{ route('berkala.lhkpn') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors pl-6">- LHKPN Pejabat</a>
                         <a href="{{ route('berkala.program') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors pl-6">- Program & Kegiatan</a>
-                        <a href="{{ route('berkala.keuangan') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors pl-6">- Informasi Keuangan</a>
+                        <a href="{{ route('berkala.keuangan') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors pl-6">- Informasi Keuangan</a> --}}
                         <hr class="my-1 border-gray-100">
                         <a href="{{ route('informasi.daftar') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors font-medium">Daftar Informasi Publik</a>
                     </div>
