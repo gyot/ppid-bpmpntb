@@ -99,14 +99,32 @@
                     </div>
 
                     @if($document->file)
-                        <div class="mt-6">
+                        @php $ext = pathinfo($document->file ?? '', PATHINFO_EXTENSION); @endphp
+                        <div class="mt-6 flex flex-wrap gap-3">
+                            @if($ext === 'pdf' || $ext === 'jpg' || $ext === 'jpeg' || $ext === 'png')
+                                <button type="button" onclick="togglePreview('{{ asset('storage/' . $document->file) }}', '{{ $ext }}')" class="btn-secondary inline-flex items-center gap-2 px-6 py-3 text-base">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                    <span id="previewBtnText">Preview Dokumen</span>
+                                </button>
+                            @endif
                             <a href="{{ route('dokumen.download', $document->slug) }}" class="btn-primary inline-flex items-center gap-2 px-8 py-3 text-base">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-                                </svg>
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                                 Download Dokumen
                             </a>
                         </div>
+
+                        {{-- Inline Preview --}}
+                        @if($ext === 'pdf' || $ext === 'jpg' || $ext === 'jpeg' || $ext === 'png')
+                        <div id="previewContainer" class="mt-6 hidden">
+                            <div class="rounded-xl border border-gray-200 overflow-hidden bg-gray-50">
+                                @if($ext === 'pdf')
+                                    <iframe id="inlinePreview" src="" class="w-full" style="height:75vh;"></iframe>
+                                @else
+                                    <img id="inlinePreviewImg" src="" class="max-w-full h-auto mx-auto p-4" alt="Preview">
+                                @endif
+                            </div>
+                        </div>
+                        @endif
                     @endif
                 </div>
 
@@ -147,4 +165,30 @@
         </div>
     </div>
 </section>
+
+<script>
+let previewOpen = false;
+function togglePreview(url, ext) {
+    const container = document.getElementById('previewContainer');
+    const btnText = document.getElementById('previewBtnText');
+    previewOpen = !previewOpen;
+
+    if (previewOpen) {
+        container.classList.remove('hidden');
+        btnText.textContent = 'Tutup Preview';
+        if (ext === 'pdf') {
+            document.getElementById('inlinePreview').src = url;
+        } else {
+            document.getElementById('inlinePreviewImg').src = url;
+        }
+        container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+        container.classList.add('hidden');
+        btnText.textContent = 'Preview Dokumen';
+        if (ext === 'pdf') {
+            document.getElementById('inlinePreview').src = '';
+        }
+    }
+}
+</script>
 @endsection

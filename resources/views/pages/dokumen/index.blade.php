@@ -92,8 +92,14 @@
                                 </div>
                             </div>
 
-                            <div class="mt-4 pt-4 border-t border-gray-100">
-                                <a href="{{ route('dokumen.download', $doc->slug) }}" class="btn-accent w-full text-center text-sm py-2">Download</a>
+                            <div class="mt-4 pt-4 border-t border-gray-100 flex gap-2">
+                                @php $ext = pathinfo($doc->file ?? '', PATHINFO_EXTENSION); @endphp
+                                @if($ext === 'pdf' || $ext === 'jpg' || $ext === 'jpeg' || $ext === 'png')
+                                    <button type="button" onclick="openPreview('{{ asset('storage/' . $doc->file) }}', '{{ $ext }}', '{{ addslashes($doc->title) }}')" class="flex-1 text-center text-sm py-2 px-3 rounded-lg border border-primary text-primary hover:bg-primary hover:text-white transition-colors font-medium">
+                                        Preview
+                                    </button>
+                                @endif
+                                <a href="{{ route('dokumen.download', $doc->slug) }}" class="flex-1 btn-accent text-center text-sm py-2">Download</a>
                             </div>
                         </div>
                     </div>
@@ -114,4 +120,68 @@
         @endif
     </div>
 </section>
+
+{{-- Preview Modal --}}
+<div id="previewModal" class="fixed inset-0 z-50 hidden" x-data="{ open: false }">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closePreview()"></div>
+    <div class="relative w-full h-full flex items-center justify-center p-4 md:p-8">
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[90vh] flex flex-col overflow-hidden">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+                <h3 id="previewTitle" class="font-bold text-navy text-lg line-clamp-1"></h3>
+                <div class="flex items-center gap-2">
+                    <a id="previewDownloadBtn" href="#" class="inline-flex items-center gap-1.5 px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary-dark transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Download
+                    </a>
+                    <button onclick="closePreview()" class="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="flex-1 overflow-auto p-2">
+                <iframe id="previewFrame" src="" class="w-full h-full min-h-[70vh] border-0 rounded-lg hidden"></iframe>
+                <img id="previewImage" src="" class="max-w-full h-auto mx-auto rounded-lg hidden" alt="Preview">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function openPreview(url, ext, title) {
+    const modal = document.getElementById('previewModal');
+    const frame = document.getElementById('previewFrame');
+    const img = document.getElementById('previewImage');
+    const titleEl = document.getElementById('previewTitle');
+    const downloadBtn = document.getElementById('previewDownloadBtn');
+
+    titleEl.textContent = title;
+    downloadBtn.href = url;
+
+    frame.classList.add('hidden');
+    img.classList.add('hidden');
+
+    if (ext === 'pdf') {
+        frame.src = url;
+        frame.classList.remove('hidden');
+    } else if (['jpg', 'jpeg', 'png'].includes(ext)) {
+        img.src = url;
+        img.classList.remove('hidden');
+    }
+
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function closePreview() {
+    const modal = document.getElementById('previewModal');
+    const frame = document.getElementById('previewFrame');
+    modal.classList.add('hidden');
+    frame.src = '';
+    document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closePreview();
+});
+</script>
 @endsection
