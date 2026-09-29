@@ -24,6 +24,12 @@ class CalendarProgram extends Model
         'updated_by',
     ];
 
+    protected $appends = [
+        'bulan_array',
+        'pj_color',
+        'formatted_anggaran',
+    ];
+
     protected function casts(): array
     {
         return [
