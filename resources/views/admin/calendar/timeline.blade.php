@@ -79,11 +79,13 @@
                             <td class="col-pj text-left py-2 px-3 font-medium text-gray-900 bg-white">{{ Str::limit($item->penanggung_jawab, 20) }}</td>
                             <td class="col-uraian text-left py-2 px-3 text-gray-700 bg-white">{{ Str::limit($item->uraian_kegiatan, 40) }}</td>
                             @for($m = 1; $m <= 12; $m++)
-                                <td class="text-center py-2 px-2">
-                                    @if(in_array($m, $item->bulan_array ?? []))
-                                        <span class="calendar-cell-active inline-block w-6 h-6 leading-6 text-xs" style="background-color: {{ $item->pj_color ?? '#2563eb' }}">1</span>
-                                    @endif
-                                </td>
+                                @if(in_array($m, $item->bulan_array ?? []))
+                                    <td class="text-center py-2 px-2" style="background-color: {{ $item->pj_color ?? '#2563eb' }}20;">
+                                        <span class="inline-block w-6 h-6 leading-6 rounded text-xs font-bold" style="background-color: {{ $item->pj_color ?? '#2563eb' }}; color: white;">1</span>
+                                    </td>
+                                @else
+                                    <td class="text-center py-2 px-2 bg-gray-50/50"></td>
+                                @endif
                             @endfor
                             <td class="text-right py-2 px-3 text-gray-700">{{ $item->formatted_anggaran ?? '-' }}</td>
                         </tr>
