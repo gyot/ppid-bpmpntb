@@ -45,33 +45,27 @@
                 <table class="calendar-table w-full text-sm">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="col-pj text-left py-3 px-3 font-medium text-gray-500 bg-gray-50">Penanggung Jawab</th>
-                            <th class="col-uraian text-left py-3 px-3 font-medium text-gray-500 bg-gray-50">Uraian Kegiatan</th>
+                            <th class="col-uraian text-left py-3 px-4 font-medium text-gray-500 bg-gray-50">Uraian Kegiatan</th>
                             @php $monthAbbr = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des']; @endphp
                             @foreach($monthAbbr as $m)
                                 <th class="text-center py-3 px-2 font-medium text-gray-500 bg-gray-50">{{ $m }}</th>
                             @endforeach
-                            <th class="text-right py-3 px-3 font-medium text-gray-500 bg-gray-50 min-w-[100px]">Anggaran</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($programs as $item)
                             <tr class="border-b border-gray-100 hover:bg-gray-50 cursor-pointer" @click="openDetail({{ json_encode($item) }})">
-                                <td class="col-pj text-left py-2 px-3 font-medium text-gray-900 bg-white">{{ Str::limit($item->penanggung_jawab, 20) }}</td>
-                                <td class="col-uraian text-left py-2 px-3 text-gray-700 bg-white">{{ Str::limit($item->uraian_kegiatan, 40) }}</td>
+                                <td class="col-uraian text-left py-2.5 px-4 text-gray-700 bg-white">{{ Str::limit($item->uraian_kegiatan, 60) }}</td>
                                 @for($m = 1; $m <= 12; $m++)
                                     @if(in_array($m, $item->bulan_array ?? []))
-                                        <td class="text-center py-2 px-2" style="background-color: {{ $item->pj_color ?? '#2563eb' }}20;">
-                                            <span class="inline-block w-6 h-6 leading-6 rounded text-xs font-bold" style="background-color: {{ $item->pj_color ?? '#2563eb' }}; color: white;">1</span>
-                                        </td>
+                                        <td class="text-center py-2.5 px-2" style="background-color: {{ $item->pj_color ?? '#2563eb' }};"></td>
                                     @else
-                                        <td class="text-center py-2 px-2 bg-gray-50/50"></td>
+                                        <td class="text-center py-2.5 px-2 bg-gray-50/50"></td>
                                     @endif
                                 @endfor
-                                <td class="text-right py-2 px-3 text-gray-700">{{ $item->formatted_anggaran ?? '-' }}</td>
                             </tr>
                         @empty
-                            <tr><td colspan="15" class="py-8 text-center text-gray-400">Tidak ada data program untuk tahun {{ $tahun }}</td></tr>
+                            <tr><td colspan="13" class="py-8 text-center text-gray-400">Tidak ada data program untuk tahun {{ $tahun }}</td></tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -82,12 +76,66 @@
             <div class="mt-4">{{ $programs->withQueryString()->links() }}</div>
         @endif
 
-        @include('components.calendar-detail-modal')
+        {{-- Detail Modal --}}
+        <div x-show="showModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" @click.self="showModal = false" x-transition>
+            <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full mx-4 max-h-[80vh] overflow-y-auto" @click.stop>
+                <div class="flex items-center justify-between p-5 border-b border-gray-100">
+                    <h3 class="text-lg font-bold text-navy">Detail Program</h3>
+                    <button @click="showModal = false" class="p-1 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+                <div class="p-5 space-y-4" x-show="selectedProgram">
+                    <div class="space-y-3">
+                        <div class="flex items-start gap-3">
+                            <span class="text-sm text-gray-500 w-40 flex-shrink-0">Tahun</span>
+                            <span class="text-sm font-medium text-navy" x-text="selectedProgram?.tahun"></span>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="text-sm text-gray-500 w-40 flex-shrink-0">Penanggung Jawab</span>
+                            <span class="text-sm font-medium text-navy" x-text="selectedProgram?.penanggung_jawab"></span>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="text-sm text-gray-500 w-40 flex-shrink-0">Uraian Kegiatan</span>
+                            <span class="text-sm font-medium text-navy" x-text="selectedProgram?.uraian_kegiatan"></span>
+                        </div>
+                        <div x-show="selectedProgram?.deskripsi" class="flex items-start gap-3">
+                            <span class="text-sm text-gray-500 w-40 flex-shrink-0">Deskripsi</span>
+                            <span class="text-sm text-gray-700" x-text="selectedProgram?.deskripsi"></span>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="text-sm text-gray-500 w-40 flex-shrink-0">Anggaran</span>
+                            <span class="text-sm font-medium text-navy" x-text="selectedProgram?.formatted_anggaran ?? 'Rp 0'"></span>
+                        </div>
+                    </div>
+                    <div class="pt-3 border-t border-gray-100">
+                        <span class="text-sm text-gray-500 mb-2 block">Bulan Pelaksanaan</span>
+                        <div class="flex flex-wrap gap-1.5">
+                            <template x-for="b in (selectedProgram?.bulan_array ?? [])" :key="b">
+                                <span class="inline-block text-xs px-2.5 py-1 rounded-full font-medium text-white" :style="'background-color:' + (selectedProgram?.pj_color ?? '#2563eb')" x-text="['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'][b-1]"></span>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center justify-end gap-2 p-5 border-t border-gray-100">
+                    <button @click="showModal = false" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm hover:bg-gray-50">Tutup</button>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/calendar.css') }}">
+<style>
+.calendar-table { table-layout: fixed; width: 100%; }
+.calendar-table th, .calendar-table td { text-align: center; min-width: 50px; }
+.calendar-table .col-uraian { position: sticky; left: 0; z-index: 10; background: white; min-width: 250px; text-align: left; }
+.calendar-table thead th { position: sticky; top: 0; z-index: 20; }
+@media print {
+    .calendar-table .col-uraian { position: static; }
+    @page { size: landscape; margin: 1cm; }
+}
+</style>
 @endpush
 
 @push('scripts')
