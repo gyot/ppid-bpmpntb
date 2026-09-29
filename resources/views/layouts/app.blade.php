@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="turbo-cache-control" content="no-preview">
 
     {{-- SEO --}}
     <title>@yield('title', 'PPID BPMP Provinsi Nusa Tenggara Barat')</title>
@@ -12,22 +13,34 @@
     <link rel="canonical" href="@yield('canonical_url', url()->current())">
 
     {{-- Open Graph --}}
-    <meta property="og:type" content="website">
+    <meta property="og:type" content="@yield('og_type', 'website')">
     <meta property="og:title" content="@yield('og_title', 'PPID BPMP Provinsi Nusa Tenggara Barat')">
     <meta property="og:description" content="@yield('og_description', 'Portal Keterbukaan Informasi Publik PPID BPMP Provinsi Nusa Tenggara Barat')">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:site_name" content="PPID BPMP NTB">
     <meta property="og:locale" content="id_ID">
+    @hasSection('og_image')
+        <meta property="og:image" content="@yield('og_image')">
+    @endif
 
     {{-- Twitter Card --}}
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="@yield('twitter_title', 'PPID BPMP Provinsi Nusa Tenggara Barat')">
     <meta name="twitter:description" content="@yield('twitter_description', 'Portal Keterbukaan Informasi Publik PPID BPMP Provinsi Nusa Tenggara Barat')">
+    @hasSection('twitter_image')
+        <meta name="twitter:image" content="@yield('twitter_image')">
+    @endif
 
     {{-- Fonts --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    {{-- Turbo Drive for SPA-like navigation --}}
+    <script type="module">
+        import { Turbo } from "https://cdn.jsdelivr.net/npm/@hotwired/turbo@8/+esm";
+        Turbo.start();
+    </script>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -42,7 +55,7 @@
     @include('partials.navbar')
 
     {{-- Main Content --}}
-    <main>
+    <main id="app-content">
         @yield('content')
     </main>
 

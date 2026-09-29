@@ -3,7 +3,7 @@
         'name' => 'laravel/laravel',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '955267547d9609a5fab9f9d4ef4cfd8eff7c41f6',
+        'reference' => '3330bce6abd7d9a712fbdb333cd7e91061c46f3e',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -174,6 +174,15 @@
             'install_path' => __DIR__ . '/../hamcrest/hamcrest-php',
             'aliases' => array(),
             'dev_requirement' => true,
+        ),
+        'hotwired/turbo-laravel' => array(
+            'pretty_version' => '2.6.0',
+            'version' => '2.6.0.0',
+            'reference' => 'a3fe3023283d5a87a1639d3809502802c085421a',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../hotwired/turbo-laravel',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'illuminate/auth' => array(
             'dev_requirement' => false,
@@ -406,7 +415,7 @@
         'laravel/laravel' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '955267547d9609a5fab9f9d4ef4cfd8eff7c41f6',
+            'reference' => '3330bce6abd7d9a712fbdb333cd7e91061c46f3e',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

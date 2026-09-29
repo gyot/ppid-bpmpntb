@@ -5,8 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Admin') - {{ config('app.name', 'PPID BPMP NTB') }}</title>
+    <meta name="turbo-cache-control" content="no-cache">
+    <script type="module">
+        import { Turbo } from "https://cdn.jsdelivr.net/npm/@hotwired/turbo@8/+esm";
+        Turbo.start();
+    </script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     @stack('styles')
 </head>
 <body class="h-full bg-gray-100 text-gray-900 antialiased" x-data="{ sidebarOpen: false }">
