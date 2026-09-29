@@ -1,7 +1,12 @@
 /node_modules
-/public
+/public/build
+/public/storage
+/public/uploads
+/public/public.zip
+/public/*.zip
+/public/hot
 /storage/*.key
-# /vendor
+/vendor
 .env
 .env.backup
 .env.production
@@ -16,3 +21,4 @@ yarn-error.log
 /.vscode
 /database/*.sqlite*
 *.log
+extract_pdf*.php
