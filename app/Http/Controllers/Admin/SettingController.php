@@ -23,7 +23,7 @@ class SettingController extends Controller
                 'institution_name', 'institution_short_name', 'institution_description',
                 'contact_email', 'contact_phone', 'contact_whatsapp', 'contact_fax', 'contact_address',
                 'service_hours', 'website_url',
-                'social_facebook', 'social_twitter', 'social_instagram', 'social_youtube', 'social_tiktok',
+                'social_facebook', 'social_twitter', 'social_instagram', 'social_youtube', 'social_tiktok', 'social_whatsapp',
                 'meta_title', 'meta_description', 'footer_text',
                 'ppid_head_name', 'ppid_head_position', 'ppid_head_nip',
             ];

@@ -234,6 +234,10 @@
                         <label class="block text-sm font-medium text-gray-700 mb-1.5">TikTok</label>
                         <input type="url" name="social_tiktok" value="{{ old('social_tiktok', $settings['social_tiktok'] ?? '') }}" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors" placeholder="https://tiktok.com/...">
                     </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1.5">WhatsApp</label>
+                        <input type="url" name="social_whatsapp" value="{{ old('social_whatsapp', $settings['social_whatsapp'] ?? '') }}" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors" placeholder="https://wa.me/628xxxxxxxxxx">
+                    </div>
                 </div>
             </div>
         </div>

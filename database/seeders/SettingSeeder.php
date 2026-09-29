@@ -41,6 +41,7 @@ class SettingSeeder extends Seeder
             ['key' => 'social_instagram', 'value' => 'https://instagram.com/bpmpntb', 'group' => 'social'],
             ['key' => 'social_youtube', 'value' => 'https://www.youtube.com/@bpmpntb6747', 'group' => 'social'],
             ['key' => 'social_tiktok', 'value' => '', 'group' => 'social'],
+            ['key' => 'social_whatsapp', 'value' => 'https://wa.me/628113906669', 'group' => 'social'],
 
             // SEO
             ['key' => 'meta_title', 'value' => 'PPID BPMP Provinsi Nusa Tenggara Barat - Portal Keterbukaan Informasi Publik', 'group' => 'seo'],
