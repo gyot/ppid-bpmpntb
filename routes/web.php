@@ -33,6 +33,7 @@ use App\Http\Controllers\Admin\RegulasiController as AdminRegulasiController;
 use App\Http\Controllers\Admin\PejabatController as AdminPejabatController;
 use App\Http\Controllers\Admin\ProfilController as AdminProfilController;
 use App\Http\Controllers\Admin\UploadController as AdminUploadController;
+use App\Http\Controllers\Admin\CalendarProgramController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -207,4 +208,16 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/profil/download-sk', [AdminProfilController::class, 'downloadSk'])->name('profil.download-sk');
 
     Route::post('/upload/image', [AdminUploadController::class, 'image'])->name('upload.image');
+
+    Route::prefix('calendar-programs')->name('calendar-programs.')->group(function () {
+        Route::get('/import', [CalendarProgramController::class, 'importForm'])->name('import.form');
+        Route::post('/import', [CalendarProgramController::class, 'import'])->name('import');
+        Route::get('/export', [CalendarProgramController::class, 'export'])->name('export');
+        Route::get('/template', [CalendarProgramController::class, 'template'])->name('template');
+        Route::get('/timeline', [CalendarProgramController::class, 'timeline'])->name('timeline');
+        Route::post('{id}/duplicate', [CalendarProgramController::class, 'duplicate'])->name('duplicate');
+    });
+    Route::resource('calendar-programs', CalendarProgramController::class);
 });
+
+Route::get('/kalender-program', [CalendarProgramController::class, 'publicTimeline'])->name('kalender-program');

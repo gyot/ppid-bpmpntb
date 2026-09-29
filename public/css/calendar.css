@@ -1,0 +1,74 @@
+.calendar-table {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.calendar-table th,
+.calendar-table td {
+    text-align: center;
+    min-width: 60px;
+}
+
+.calendar-table .col-pj {
+    position: sticky;
+    left: 0;
+    z-index: 10;
+    background: white;
+    min-width: 120px;
+}
+
+.calendar-table .col-uraian {
+    position: sticky;
+    left: 120px;
+    z-index: 10;
+    background: white;
+    min-width: 200px;
+}
+
+.calendar-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+}
+
+.calendar-cell-active {
+    font-weight: bold;
+    color: white;
+    border-radius: 4px;
+}
+
+.calendar-color-paud {
+    background-color: #F3B81A;
+}
+
+.calendar-color-sd {
+    background-color: #32A852;
+}
+
+.calendar-color-smp {
+    background-color: #2F80ED;
+}
+
+.calendar-color-sma {
+    background-color: #9B51E0;
+}
+
+.calendar-color-manajemen {
+    background-color: #E76F51;
+}
+
+.calendar-color-default {
+    background-color: #2563eb;
+}
+
+@media print {
+    .calendar-table .col-pj,
+    .calendar-table .col-uraian {
+        position: static;
+    }
+
+    @page {
+        size: landscape;
+        margin: 1cm;
+    }
+}
