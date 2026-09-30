@@ -85,9 +85,13 @@
                                 <td>
                                     <div class="flex items-center gap-2">
                                         <a href="{{ route('informasi.show', $item->slug) }}" class="text-primary hover:text-primary/80 text-sm font-medium">Lihat</a>
-                                        @if($item->file)
+                                        @if($item->file_path)
                                             <span class="text-gray-300">|</span>
                                             <a href="{{ route('informasi.download', $item->slug) }}" class="text-accent hover:text-accent/80 text-sm font-medium">Download</a>
+                                        @endif
+                                        @if($item->link)
+                                            <span class="text-gray-300">|</span>
+                                            <a href="{{ $item->link }}" target="_blank" class="text-green-600 hover:text-green-700 text-sm font-medium">Link</a>
                                         @endif
                                     </div>
                                 </td>

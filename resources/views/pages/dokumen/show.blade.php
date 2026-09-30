@@ -98,19 +98,27 @@
                         </div>
                     </div>
 
-                    @if($document->file)
-                        @php $ext = pathinfo($document->file ?? '', PATHINFO_EXTENSION); @endphp
+                    @if($document->file_path || $document->link)
                         <div class="mt-6 flex flex-wrap gap-3">
-                            @if($ext === 'pdf' || $ext === 'jpg' || $ext === 'jpeg' || $ext === 'png')
-                                <button type="button" onclick="togglePreview('{{ asset('storage/' . $document->file) }}', '{{ $ext }}')" class="btn-secondary inline-flex items-center gap-2 px-6 py-3 text-base">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-                                    <span id="previewBtnText">Preview Dokumen</span>
-                                </button>
+                            @if($document->file_path)
+                                @php $ext = pathinfo($document->file_path ?? '', PATHINFO_EXTENSION); @endphp
+                                @if(in_array($ext, ['pdf','jpg','jpeg','png']))
+                                    <button type="button" onclick="togglePreview('{{ asset('storage/' . $document->file_path) }}', '{{ $ext }}')" class="btn-secondary inline-flex items-center gap-2 px-6 py-3 text-base">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                        <span id="previewBtnText">Preview Dokumen</span>
+                                    </button>
+                                @endif
+                                <a href="{{ route('dokumen.download', $document->slug) }}" class="btn-primary inline-flex items-center gap-2 px-8 py-3 text-base">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                    Download Dokumen
+                                </a>
                             @endif
-                            <a href="{{ route('dokumen.download', $document->slug) }}" class="btn-primary inline-flex items-center gap-2 px-8 py-3 text-base">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                                Download Dokumen
-                            </a>
+                            @if($document->link)
+                                <a href="{{ $document->link }}" target="_blank" class="btn-accent inline-flex items-center gap-2 px-8 py-3 text-base">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                                    Buka Link Dokumen
+                                </a>
+                            @endif
                         </div>
 
                         {{-- Inline Preview --}}

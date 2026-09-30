@@ -93,13 +93,20 @@
                             </div>
 
                             <div class="mt-4 pt-4 border-t border-gray-100 flex gap-2">
-                                @php $ext = pathinfo($doc->file ?? '', PATHINFO_EXTENSION); @endphp
-                                @if($ext === 'pdf' || $ext === 'jpg' || $ext === 'jpeg' || $ext === 'png')
-                                    <button type="button" onclick="openPreview('{{ asset('storage/' . $doc->file) }}', '{{ $ext }}', '{{ addslashes($doc->title) }}')" class="flex-1 text-center text-sm py-2 px-3 rounded-lg border border-primary text-primary hover:bg-primary hover:text-white transition-colors font-medium">
-                                        Preview
-                                    </button>
+                                @if($doc->file_path)
+                                    @php $ext = pathinfo($doc->file_path ?? '', PATHINFO_EXTENSION); @endphp
+                                    @if(in_array($ext, ['pdf','jpg','jpeg','png']))
+                                        <button type="button" onclick="openPreview('{{ asset('storage/' . $doc->file_path) }}', '{{ $ext }}', '{{ addslashes($doc->title) }}')" class="flex-1 text-center text-sm py-2 px-3 rounded-lg border border-primary text-primary hover:bg-primary hover:text-white transition-colors font-medium">
+                                            Preview
+                                        </button>
+                                    @endif
+                                    <a href="{{ route('dokumen.download', $doc->slug) }}" class="flex-1 btn-accent text-center text-sm py-2">Download</a>
+                                @elseif($doc->link)
+                                    <a href="{{ $doc->link }}" target="_blank" class="flex-1 btn-primary text-center text-sm py-2">
+                                        <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                                        Buka Link
+                                    </a>
                                 @endif
-                                <a href="{{ route('dokumen.download', $doc->slug) }}" class="flex-1 btn-accent text-center text-sm py-2">Download</a>
                             </div>
                         </div>
                     </div>
