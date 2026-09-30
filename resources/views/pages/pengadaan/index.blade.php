@@ -41,8 +41,10 @@
 
         <div class="grid sm:grid-cols-3 gap-6">
             @foreach($cards as $card)
-            <a href="{{ route($card['route']) }}" class="group block bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-lg hover:border-{{ $card['color'] }}/20 hover:-translate-y-1 transition-all duration-300">
-                <div class="w-14 h-14 rounded-xl bg-{{ $card['color'] }}/10 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+            <!-- <a href="{{ route($card['route']) }}" class="group block bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-lg hover:border-{{ $card['color'] }}/20 hover:-translate-y-1 transition-all duration-300"> -->
+            <a href="https://sirup.inaproc.id/sirup/home/penyediaSatker?idSatker=385951#" class="group block bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-lg hover:border-{{ $card['color'] }}/20 hover:-translate-y-1 transition-all duration-300">
+
+            <div class="w-14 h-14 rounded-xl bg-{{ $card['color'] }}/10 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
                     <svg class="w-7 h-7 text-{{ $card['color'] }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">{!! $card['icon'] !!}</svg>
                 </div>
                 <h3 class="text-lg font-bold text-navy mb-2 group-hover:text-primary transition-colors">{{ $card['title'] }}</h3>
