@@ -20,7 +20,7 @@
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-10 mb-8">
             <p class="text-charcoal leading-relaxed mb-4">Informasi pengadaan barang dan jasa di lingkungan BPMP Provinsi Nusa Tenggara Barat. Silakan akses tautan berikut untuk informasi lebih lanjut:</p>
             <div class="flex flex-wrap gap-4">
-                <a href="https://sirup.lkpp.go.id/sirup/home/penyediaSatker?idSatker=385951" target="_blank" class="btn-primary btn-sm">
+                <a href="https://sirup.inaproc.id/sirup/home/penyediaSatker?idSatker=385951#" target="_blank" class="btn-primary btn-sm">
                     <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                     SIRUP LKPP
                 </a>
@@ -39,12 +39,10 @@
         ];
         @endphp
 
-        <div class="grid sm:grid-cols-3 gap-6">
+        <!-- <div class="grid sm:grid-cols-3 gap-6">
             @foreach($cards as $card)
-            <!-- <a href="{{ route($card['route']) }}" class="group block bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-lg hover:border-{{ $card['color'] }}/20 hover:-translate-y-1 transition-all duration-300"> -->
-            <a href="https://sirup.inaproc.id/sirup/home/penyediaSatker?idSatker=385951#" class="group block bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-lg hover:border-{{ $card['color'] }}/20 hover:-translate-y-1 transition-all duration-300">
-
-            <div class="w-14 h-14 rounded-xl bg-{{ $card['color'] }}/10 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+            <a href="{{ route($card['route']) }}" class="group block bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-lg hover:border-{{ $card['color'] }}/20 hover:-translate-y-1 transition-all duration-300">
+                <div class="w-14 h-14 rounded-xl bg-{{ $card['color'] }}/10 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
                     <svg class="w-7 h-7 text-{{ $card['color'] }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">{!! $card['icon'] !!}</svg>
                 </div>
                 <h3 class="text-lg font-bold text-navy mb-2 group-hover:text-primary transition-colors">{{ $card['title'] }}</h3>
@@ -52,7 +50,7 @@
                 <span class="inline-flex items-center gap-1 text-primary font-semibold text-sm group-hover:gap-2 transition-all">Lihat <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg></span>
             </a>
             @endforeach
-        </div>
+        </div> -->
     </div>
 </section>
 @endsection
