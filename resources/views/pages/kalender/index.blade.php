@@ -12,7 +12,7 @@
             <svg class="w-4 h-4 mx-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
             <span class="text-white">Kalender Program</span>
         </nav>
-        <h1 class="text-2xl lg:text-3xl font-bold">DAFTAR PROGRAM BPMP PROVINSI NUSA TENGGARA BARAT</h1>
+        <h1 class="text-2xl lg:text-3xl text-white font-bold">DAFTAR PROGRAM BPMP PROVINSI NUSA TENGGARA BARAT</h1>
         <p class="text-white/80 mt-2 text-lg">TAHUN ANGGARAN {{ $tahun }}</p>
     </div>
 </section>
