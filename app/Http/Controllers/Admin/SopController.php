@@ -38,7 +38,8 @@ class SopController extends Controller
             'deskripsi' => 'required|string',
             'konten' => 'nullable|string',
             'icon' => 'nullable|string|max:255',
-            'file' => 'nullable|file|max:10240|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx',
+            'file' => 'nullable|file|max:10240|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,jpg,jpeg,png',
+            'link' => 'nullable|url|max:500',
             'sort_order' => 'nullable|integer|min:0',
             'is_active' => 'boolean',
         ]);
@@ -65,6 +66,10 @@ class SopController extends Controller
                 $data['mime_type'] = $file->getMimeType();
             }
 
+            if ($request->filled('link')) {
+                $data['link'] = $validated['link'];
+            }
+
             Sop::create($data);
 
             return redirect()->route('admin.sop.index')
@@ -87,7 +92,8 @@ class SopController extends Controller
             'deskripsi' => 'required|string',
             'konten' => 'nullable|string',
             'icon' => 'nullable|string|max:255',
-            'file' => 'nullable|file|max:10240|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx',
+            'file' => 'nullable|file|max:10240|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,jpg,jpeg,png',
+            'link' => 'nullable|url|max:500',
             'sort_order' => 'nullable|integer|min:0',
             'is_active' => 'boolean',
         ]);

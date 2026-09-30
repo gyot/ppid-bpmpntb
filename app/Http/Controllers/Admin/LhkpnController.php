@@ -45,14 +45,24 @@ class LhkpnController extends Controller
             'jabatan' => 'required|string|max:255',
             'nip' => 'nullable|string|max:30',
             'periode' => 'required|integer|min:2000|max:' . (date('Y') + 1),
-            'file' => 'required|file|max:10240|mimes:pdf,doc,docx,xls,xlsx',
+            'file' => 'nullable|file|max:10240|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png',
+            'link' => 'nullable|url|max:500',
             'status' => 'required|in:draft,published',
         ]);
 
+        if (!$request->hasFile('file') && !$request->filled('link')) {
+            return back()->withErrors(['file' => 'Unggah file atau masukkan link.'])->withInput();
+        }
+
         try {
-            $file = $request->file('file');
-            $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
-            $filePath = $file->storeAs('uploads/lhkpn', $fileName, 'public');
+            $filePath = null;
+            $fileName = null;
+
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+                $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
+                $filePath = $file->storeAs('uploads/lhkpn', $fileName, 'public');
+            }
 
             Lhkpn::create([
                 'nama_pejabat' => $validated['nama_pejabat'],
@@ -60,6 +70,8 @@ class LhkpnController extends Controller
                 'nip' => $validated['nip'] ?? null,
                 'periode' => $validated['periode'],
                 'file_path' => $filePath,
+                'file_name' => $fileName,
+                'link' => $validated['link'] ?? null,
                 'file_name' => $file->getClientOriginalName(),
                 'status' => $validated['status'],
                 'published_at' => $validated['status'] === 'published' ? now() : null,

@@ -46,14 +46,26 @@ class KeuanganController extends Controller
             'category' => 'required|in:laporan_keuangan,rka,dipa,realisasi,calk,neraca,arus_kas',
             'tahun' => 'required|integer|min:2000|max:' . (date('Y') + 1),
             'deskripsi' => 'nullable|string',
-            'file' => 'required|file|max:20480|mimes:pdf,doc,docx,xls,xlsx',
+            'file' => 'nullable|file|max:20480|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png',
+            'link' => 'nullable|url|max:500',
             'status' => 'required|in:draft,published',
         ]);
 
+        if (!$request->hasFile('file') && !$request->filled('link')) {
+            return back()->withErrors(['file' => 'Unggah file atau masukkan link.'])->withInput();
+        }
+
         try {
-            $file = $request->file('file');
-            $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
-            $filePath = $file->storeAs('uploads/keuangan', $fileName, 'public');
+            $filePath = null;
+            $fileName = null;
+            $fileSize = null;
+
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+                $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
+                $filePath = $file->storeAs('uploads/keuangan', $fileName, 'public');
+                $fileSize = $file->getSize();
+            }
 
             Keuangan::create([
                 'title' => $validated['title'],
@@ -62,8 +74,9 @@ class KeuanganController extends Controller
                 'tahun' => $validated['tahun'],
                 'deskripsi' => $validated['deskripsi'] ?? null,
                 'file_path' => $filePath,
-                'file_name' => $file->getClientOriginalName(),
-                'file_size' => $file->getSize(),
+                'file_name' => $fileName,
+                'file_size' => $fileSize,
+                'link' => $validated['link'] ?? null,
                 'status' => $validated['status'],
                 'published_at' => $validated['status'] === 'published' ? now() : null,
                 'created_by' => auth()->id(),

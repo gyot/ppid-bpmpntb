@@ -50,14 +50,24 @@ class DocumentController extends Controller
             'category' => 'required|in:regulasi,sk,sop,laporan,dip,statistik,formulir,dokumen_ppid',
             'year' => 'required|integer|min:2000|max:' . (date('Y') + 1),
             'description' => 'nullable|string',
-            'file' => 'required|file|max:10240|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx',
+            'file' => 'nullable|file|max:10240|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,jpg,jpeg,png',
+            'link' => 'nullable|url|max:500',
             'status' => 'required|in:draft,published',
         ]);
 
+        if (!$request->hasFile('file') && !$request->filled('link')) {
+            return back()->withErrors(['file' => 'Unggah file atau masukkan link.'])->withInput();
+        }
+
         try {
-            $file = $request->file('file');
-            $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
-            $filePath = $file->storeAs('uploads/documents', $fileName, 'public');
+            $filePath = null;
+            $fileName = null;
+
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+                $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
+                $filePath = $file->storeAs('uploads/documents', $fileName, 'public');
+            }
 
             Document::create([
                 'title' => $validated['title'],
@@ -66,9 +76,10 @@ class DocumentController extends Controller
                 'year' => $validated['year'],
                 'description' => $validated['description'] ?? null,
                 'file_path' => $filePath,
-                'file_name' => $file->getClientOriginalName(),
-                'file_size' => $file->getSize(),
-                'mime_type' => $file->getMimeType(),
+                'file_name' => $fileName,
+                'file_size' => $request->hasFile('file') ? $request->file('file')->getSize() : null,
+                'mime_type' => $request->hasFile('file') ? $request->file('file')->getMimeType() : null,
+                'link' => $validated['link'] ?? null,
                 'status' => $validated['status'],
                 'published_at' => $validated['status'] === 'published' ? now() : null,
                 'created_by' => auth()->id(),

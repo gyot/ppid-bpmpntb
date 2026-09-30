@@ -53,7 +53,8 @@ class PengadaanController extends Controller
             'no_kontrak' => 'nullable|string|max:255',
             'tanggal_kontrak' => 'nullable|date',
             'deskripsi' => 'nullable|string',
-            'file' => 'nullable|file|max:10240|mimes:pdf,doc,docx,xls,xlsx',
+            'file' => 'nullable|file|max:10240|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png',
+            'link' => 'nullable|url|max:500',
             'status' => 'required|in:draft,published',
         ]);
 
@@ -67,6 +68,7 @@ class PengadaanController extends Controller
                 'no_kontrak' => $validated['no_kontrak'] ?? null,
                 'tanggal_kontrak' => $validated['tanggal_kontrak'] ?? null,
                 'deskripsi' => $validated['deskripsi'] ?? null,
+                'link' => $validated['link'] ?? null,
                 'status' => $validated['status'],
                 'published_at' => $validated['status'] === 'published' ? now() : null,
                 'created_by' => auth()->id(),
@@ -105,7 +107,8 @@ class PengadaanController extends Controller
             'no_kontrak' => 'nullable|string|max:255',
             'tanggal_kontrak' => 'nullable|date',
             'deskripsi' => 'nullable|string',
-            'file' => 'nullable|file|max:10240|mimes:pdf,doc,docx,xls,xlsx',
+            'file' => 'nullable|file|max:10240|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png',
+            'link' => 'nullable|url|max:500',
             'status' => 'required|in:draft,published',
         ]);
 
@@ -119,6 +122,7 @@ class PengadaanController extends Controller
                 'no_kontrak' => $validated['no_kontrak'] ?? null,
                 'tanggal_kontrak' => $validated['tanggal_kontrak'] ?? null,
                 'deskripsi' => $validated['deskripsi'] ?? null,
+                'link' => $validated['link'] ?? null,
                 'status' => $validated['status'],
             ];
 

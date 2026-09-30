@@ -61,17 +61,27 @@ class InformationController extends Controller
             'category' => 'required|string|max:100',
             'year' => 'required|integer|min:2000|max:' . (date('Y') + 1),
             'description' => 'nullable|string',
-            'file' => 'required|file|max:10240|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx',
+            'file' => 'nullable|file|max:10240|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,jpg,jpeg,png',
+            'link' => 'nullable|url|max:500',
             'unit_pengelola' => 'nullable|string|max:255',
             'status' => 'required|in:draft,published',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:500',
         ]);
 
+        if (!$request->hasFile('file') && !$request->filled('link')) {
+            return back()->withErrors(['file' => 'Unggah file atau masukkan link.'])->withInput();
+        }
+
         try {
-            $file = $request->file('file');
-            $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
-            $filePath = $file->storeAs('uploads/informasi', $fileName, 'public');
+            $filePath = null;
+            $fileName = null;
+
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+                $fileName = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
+                $filePath = $file->storeAs('uploads/informasi', $fileName, 'public');
+            }
 
             InformationPublik::create([
                 'title' => $validated['title'],
@@ -80,6 +90,8 @@ class InformationController extends Controller
                 'year' => $validated['year'],
                 'description' => $validated['description'] ?? null,
                 'file_path' => $filePath,
+                'file_name' => $fileName,
+                'link' => $validated['link'] ?? null,
                 'file_name' => $file->getClientOriginalName(),
                 'file_size' => $file->getSize(),
                 'mime_type' => $file->getMimeType(),
