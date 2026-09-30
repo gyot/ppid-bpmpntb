@@ -22,6 +22,7 @@ class Regulasi extends Model
         'status_berlaku',
         'file_path',
         'file_name',
+        'link',
         'link_eksternal',
         'status',
         'published_at',

@@ -18,6 +18,7 @@ class Lhkpn extends Model
         'periode',
         'file_path',
         'file_name',
+        'link',
         'status',
         'published_at',
         'created_by',

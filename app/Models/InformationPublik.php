@@ -23,6 +23,7 @@ class InformationPublik extends Model
         'file_name',
         'file_size',
         'mime_type',
+        'link',
         'unit_pengelola',
         'status',
         'published_at',

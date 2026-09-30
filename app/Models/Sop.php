@@ -18,6 +18,7 @@ class Sop extends Model
         'icon',
         'file_path',
         'file_name',
+        'link',
         'file_size',
         'mime_type',
         'sort_order',

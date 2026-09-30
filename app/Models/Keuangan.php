@@ -19,6 +19,7 @@ class Keuangan extends Model
         'deskripsi',
         'file_path',
         'file_name',
+        'link',
         'file_size',
         'status',
         'published_at',

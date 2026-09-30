@@ -22,6 +22,7 @@ class Pengadaan extends Model
         'deskripsi',
         'file_path',
         'file_name',
+        'link',
         'status',
         'published_at',
         'created_by',

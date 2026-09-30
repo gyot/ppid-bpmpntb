@@ -24,6 +24,7 @@ class DaftarInformasiPublik extends Model
         'jkd',
         'file_path',
         'file_name',
+        'link',
         'status',
         'created_by',
     ];

@@ -19,6 +19,7 @@ class Document extends Model
         'description',
         'file_path',
         'file_name',
+        'link',
         'file_size',
         'mime_type',
         'status',
