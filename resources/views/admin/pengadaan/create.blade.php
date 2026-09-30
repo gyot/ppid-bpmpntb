@@ -63,10 +63,7 @@
                     <label class="input-label block text-sm font-medium text-gray-700 mb-1">Tanggal Kontrak</label>
                     <input type="date" name="tanggal_kontrak" value="{{ old('tanggal_kontrak') }}" class="input-field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary">
                 </div>
-                <div>
-                    <label class="input-label block text-sm font-medium text-gray-700 mb-1">File</label>
-                    <input type="file" name="file" class="input-field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary">
-                </div>
+                <x-file-or-link name="file" linkName="link" label="File Pengadaan" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png" maxSize="10MB" />
             </div>
 
             <div>

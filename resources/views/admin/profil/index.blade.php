@@ -41,16 +41,14 @@
     </div>
 
     <div class="bg-white rounded-lg shadow p-6">
-        <label class="input-label mb-3">SK PPID (Surat Keputusan Penetapan PPID)</label>
+        <x-file-or-link name="profil_sk_file" linkName="profil_sk_link" label="SK PPID (Surat Keputusan Penetapan PPID)" :currentFile="($settings['profil_sk_file'] ?? null)" :currentLink="($settings['profil_sk_link'] ?? null)" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" maxSize="10MB" />
         @if($skUploaded)
-            <div class="flex items-center gap-3 p-3 bg-green-50 border border-green-200 rounded-lg mb-3">
+            <div class="flex items-center gap-3 p-3 bg-green-50 border border-green-200 rounded-lg mt-3">
                 <svg class="w-5 h-5 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 <span class="text-sm text-green-700 flex-1">File terupload: <strong>{{ $skFileName }}</strong></span>
                 <a href="{{ route('admin.profil.download-sk') }}" class="text-sm text-primary hover:underline font-medium">Download</a>
             </div>
         @endif
-        <input type="file" name="profil_sk_file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" class="input-field w-full">
-        <p class="text-xs text-gray-500 mt-1">Format: PDF, DOC, DOCX, JPG, PNG. Maks: 10MB. Kosongkan jika tidak ingin mengubah.</p>
     </div>
 
     <div class="flex gap-3">

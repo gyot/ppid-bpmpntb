@@ -40,19 +40,7 @@
                 @error('status_berlaku')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                    <label class="input-label block text-sm font-medium text-gray-700 mb-1">File (opsional)</label>
-                    <input type="file" name="file" class="input-field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary @error('file') border-red-500 @enderror">
-                    <p class="text-xs text-gray-500 mt-1">Format: PDF, DOC, DOCX. Maks: 10MB</p>
-                    @error('file')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
-                </div>
-                <div>
-                    <label class="input-label block text-sm font-medium text-gray-700 mb-1">Link Eksternal (opsional)</label>
-                    <input type="url" name="link_eksternal" value="{{ old('link_eksternal') }}" placeholder="https://..." class="input-field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary @error('link_eksternal') border-red-500 @enderror">
-                    @error('link_eksternal')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
-                </div>
-            </div>
+            <x-file-or-link name="file" linkName="link_eksternal" label="File/Link Regulasi" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" maxSize="10MB" />
 
             <div>
                 <label class="input-label block text-sm font-medium text-gray-700 mb-1">Status Publikasi</label>

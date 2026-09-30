@@ -64,13 +64,7 @@
                     <label class="input-label block text-sm font-medium text-gray-700 mb-1">Tanggal Kontrak</label>
                     <input type="date" name="tanggal_kontrak" value="{{ old('tanggal_kontrak', $item->tanggal_kontrak?->format('Y-m-d')) }}" class="input-field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary">
                 </div>
-                <div>
-                    <label class="input-label block text-sm font-medium text-gray-700 mb-1">File</label>
-                    @if($item->file_path)
-                        <p class="text-sm text-gray-500 mb-1">File: <a href="{{ Storage::url($item->file_path) }}" target="_blank" class="text-primary hover:underline">{{ $item->file_name }}</a></p>
-                    @endif
-                    <input type="file" name="file" class="input-field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary">
-                </div>
+                <x-file-or-link name="file" linkName="link" label="File Pengadaan" :currentFile="$item->file_path ?? null" :currentLink="$item->link ?? null" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png" maxSize="10MB" />
             </div>
 
             <div>

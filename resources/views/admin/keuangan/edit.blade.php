@@ -53,14 +53,7 @@
                 <textarea name="deskripsi" rows="3" class="input-field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary">{{ old('deskripsi', $item->deskripsi) }}</textarea>
             </div>
 
-            <div>
-                <label class="input-label block text-sm font-medium text-gray-700 mb-1">File</label>
-                @if($item->file_path)
-                    <p class="text-sm text-gray-500 mb-1">File saat ini: <a href="{{ Storage::url($item->file_path) }}" target="_blank" class="text-primary hover:underline">{{ $item->file_name }}</a> ({{ $item->formatted_file_size }})</p>
-                @endif
-                <input type="file" name="file" class="input-field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary @error('file') border-red-500 @enderror">
-                @error('file')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
-            </div>
+            <x-file-or-link name="file" linkName="link" label="File Keuangan" :currentFile="$item->file_path ?? null" :currentLink="$item->link ?? null" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png" maxSize="10MB" />
 
             <div>
                 <label class="input-label block text-sm font-medium text-gray-700 mb-1">Status</label>

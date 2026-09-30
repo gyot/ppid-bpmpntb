@@ -37,15 +37,7 @@
                 @error('konten')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
             </div>
 
-            <div>
-                <label class="input-label block text-sm font-medium text-gray-700 mb-1">File Dokumen</label>
-                @if($item->file_path)
-                    <p class="text-sm text-gray-500 mb-1">File saat ini: <a href="{{ Storage::url($item->file_path) }}" target="_blank" class="text-primary hover:underline">{{ $item->file_name ?? basename($item->file_path) }}</a></p>
-                @endif
-                <input type="file" name="file" class="input-field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary @error('file') border-red-500 @enderror">
-                <p class="text-xs text-gray-500 mt-1">Kosongkan jika tidak ingin mengubah file</p>
-                @error('file')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
-            </div>
+            <x-file-or-link name="file" linkName="link" label="File SOP" :currentFile="$item->file_path ?? null" :currentLink="$item->link ?? null" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png" maxSize="10MB" />
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>

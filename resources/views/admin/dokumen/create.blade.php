@@ -61,11 +61,7 @@
                 @error('unit_pengelola')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
             </div>
 
-            <div>
-                <label class="input-label block text-sm font-medium text-gray-700 mb-1">File Dokumen <span class="text-red-500">*</span></label>
-                <input type="file" name="file" required class="input-field w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-primary @error('file') border-red-500 @enderror">
-                @error('file')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
-            </div>
+            <x-file-or-link name="file" linkName="link" label="File Dokumen" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png" maxSize="10MB" />
 
             <div>
                 <label class="input-label block text-sm font-medium text-gray-700 mb-1">Status</label>
