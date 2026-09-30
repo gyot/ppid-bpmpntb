@@ -72,7 +72,6 @@ class LhkpnController extends Controller
                 'file_path' => $filePath,
                 'file_name' => $fileName,
                 'link' => $validated['link'] ?? null,
-                'file_name' => $file->getClientOriginalName(),
                 'status' => $validated['status'],
                 'published_at' => $validated['status'] === 'published' ? now() : null,
                 'created_by' => auth()->id(),
