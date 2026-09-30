@@ -110,7 +110,8 @@ class DocumentController extends Controller
             'category' => 'required|in:regulasi,sk,sop,laporan,dip,statistik,formulir,dokumen_ppid',
             'year' => 'required|integer|min:2000|max:' . (date('Y') + 1),
             'description' => 'nullable|string',
-            'file' => 'nullable|file|max:10240|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx',
+            'file' => 'nullable|file|max:10240|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,jpg,jpeg,png',
+            'link' => 'nullable|url|max:500',
             'status' => 'required|in:draft,published',
         ]);
 
@@ -120,6 +121,7 @@ class DocumentController extends Controller
                 'category' => $validated['category'],
                 'year' => $validated['year'],
                 'description' => $validated['description'] ?? null,
+                'link' => $validated['link'] ?? null,
                 'status' => $validated['status'],
             ];
 
